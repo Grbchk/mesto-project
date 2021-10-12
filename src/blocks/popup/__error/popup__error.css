@@ -1,0 +1,19 @@
+.popup__error {
+  color: #FF0000;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 14px;
+  height: 30px;
+  max-width: 358px;
+  padding: 5px 0;
+}
+
+.popup__error:last-child {
+  height: 48px;
+}
+
+@media screen and (max-width: 500px) {
+  .popup__error  {
+    max-width: 238px;
+  }
+}

@@ -1,0 +1,11 @@
+.page__header {
+  margin: 0 auto;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(84, 84, 84, .7);
+}
+
+@media screen and (max-width: 320px) {
+  .page__header {
+    padding-bottom: 30px;
+  }
+}

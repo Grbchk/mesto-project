@@ -1,0 +1,12 @@
+.popup__item {
+  border: 0;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 17px;
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  padding: 0 0 13px 0;
+}
+

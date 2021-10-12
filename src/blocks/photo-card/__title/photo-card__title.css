@@ -1,0 +1,13 @@
+.photo-card__title {
+  margin: 0;
+  color: #000;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 29px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-top: 25px;
+  padding-bottom: 31px;
+}

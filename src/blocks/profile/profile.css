@@ -1,0 +1,7 @@
+.profile {
+  background-color: #000;
+  max-width: 880px;
+  display: grid;
+  grid-template-columns: max-content 1fr 1fr;
+  align-items: start;
+}

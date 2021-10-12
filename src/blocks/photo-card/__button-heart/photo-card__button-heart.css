@@ -1,0 +1,14 @@
+.photo-card__button-heart {
+  border: 0;
+  padding: 0;
+  min-width: 22px;
+  min-height: 19px;
+  background: url(../../../images/heart-button.svg) no-repeat center center;
+  cursor: pointer;
+  margin-right: 20px;
+  transition: all .5s;
+}
+
+.photo-card__button-heart:hover {
+  opacity: 50%;
+}

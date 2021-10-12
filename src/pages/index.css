@@ -1,0 +1,50 @@
+@import url(../vendor/normalize.css);
+@import url(../vendor/fonts/fonts.css);
+/*Blocks*/
+@import url(../blocks/page/page.css);
+@import url(../blocks/header/header.css);
+@import url(../blocks/profile/profile.css);
+@import url(../blocks/photo-grid/photo-grid.css);
+@import url(../blocks/photo-card/photo-card.css);
+@import url(../blocks/footer/footer.css);
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/viewing-photo/viewing-photo.css);
+
+/*Elements*/
+@import url(../blocks/page/__header/page__header.css);
+@import url(../blocks/page/__profile/page__profile.css);
+@import url(../blocks/page/__photo-grid/page__photo-grid.css);
+@import url(../blocks/page/__footer/page__footer.css);
+@import url(../blocks/header/__logo/header__logo.css);
+@import url(../blocks/profile/__photo/profile__photo.css);
+@import url(../blocks/profile/__user/profile__user.css);
+@import url(../blocks/profile/__title/profile__title.css);
+@import url(../blocks/profile/__subtitle/profile__subtitle.css);
+@import url(../blocks/profile/__button-add/profile__button-add.css);
+@import url(../blocks/profile/__button-edit/profile__button-edit.css);
+@import url(../blocks/photo-grid/__list/photo-grid__list.css);
+@import url(../blocks/photo-card/__image/photo-card__image.css);
+@import url(../blocks/photo-card/__background/photo-card__background.css);
+@import url(../blocks/photo-card/__title/photo-card__title.css);
+@import url(../blocks/photo-card/__button-heart/photo-card__button-heart.css);
+@import url(../blocks/photo-card/__button-delete/photo-card__button-delete.css);
+@import url(../blocks/footer/__copyright/footer__copyright.css);
+@import url(../blocks/popup/__container/popup__container.css);
+@import url(../blocks/popup/__form/popup__form.css);
+@import url(../blocks/popup/__title/popup__title.css);
+@import url(../blocks/popup/__item/popup__item.css);
+@import url(../blocks/popup/__error/popup__error.css);
+@import url(../blocks/popup/__button/popup__button.css);
+@import url(../blocks/popup/__close-button/popup__close-button.css);
+@import url(../blocks/viewing-photo/__container/viewing-photo__container.css);
+@import url(../blocks/viewing-photo/__image/viewing-photo__image.css);
+@import url(../blocks/viewing-photo/__figcaption/viewing-photo__figcaption.css);
+
+/*Modifiers*/
+@import url(../blocks/photo-card/__button-heart/_active/photo-card__button-heart_active.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/__item/_type/popup__item_type_error.css);
+@import url(../blocks/popup/__button/_disabled/popup__button_disabled.css);
+@import url(../blocks/popup/__error/_visible/popup__error_visible.css);
+
+

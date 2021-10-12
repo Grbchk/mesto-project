@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Портал для путешественников">
+  <meta name="keywords" content="Путешествия, Дневник путешественника">
+  <meta name="author" content="Яндекс Практикум">
+  <title>Mesto Russia</title>
+</head>
+
+<body class="page">
+  <header class="header page__header">
+    <a href="#"><img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="логотип сайта"></a>
+  </header>
+  <main class="main" >
+    <section class="profile page__profile" aria-label="профиль">
+      <img class="profile__photo" src="<%=require('./images/profile-photo.jpg')%>" alt="фото профиля Жак-Ив Кусто">
+      <div class="profile__user">
+          <h1 class="profile__title">Жак-Ив Кусто</h1>
+          <button class="profile__button-edit" type="button"></button>
+          <p class="profile__subtitle">Исследователь океана</p>
+      </div>
+      <button class="profile__button-add" type="button"></button>
+    </section>
+    <section class="photo-grid page__photo-grid">
+      <ul class="photo-grid__list">
+      </ul>
+    </section>
+  </main>
+  <footer class="footer page__footer">
+    <p class="footer__copyright">© 2021 Mesto Russia</p>
+  </footer>
+
+  <div class="popup" id="add-profile">
+    <div class="popup__container">
+      <form class="popup__form" name="profile-popup">
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <input type="text" id="popup-profile-title" name="profile-popup-title" class="popup__item" placeholder="Имя" minlength="2" maxlength="40" required>
+        <span class="popup__error popup-profile-title-error"></span>
+        <input type="text" id="popup-profile-subtitle" name="profile-popup-subtitle" class="popup__item" placeholder="О себе" minlength="2" maxlength="200" required>
+        <span class="popup__error popup-profile-subtitle-error"></span>
+        <button type="submit" id="save-button" class="popup__button">Сохранить</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
+  <div class="popup" id="add-photo-card">
+    <div class="popup__container">
+      <form class="popup__form" name="photo-card-popup">
+        <h2 class="popup__title">Новое место</h2>
+        <input type="text" id="popup-photo-title" name="photo-card-title" class="popup__item" placeholder="Название" minlength="2" maxlength="30" required>
+        <span class="popup__error popup-photo-title-error"></span>
+        <input type="url" id="popup-photo-subtitle" name="photo-card-subtitle" class="popup__item" placeholder="Ссылка на картинку" required>
+        <span class="popup__error popup-photo-subtitle-error"></span>
+        <button type="submit" id="save-button" class="popup__button">Создать</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
+  <div class="viewing-photo">
+    <figure class="viewing-photo__container">
+      <img class="viewing-photo__image" src="" alt="пейзаж">
+      <figcaption class="viewing-photo__figcaption"></figcaption>
+      <button type="button" class="popup__close-button"></button>
+    </figure>
+  </div>
+
+  <template id="photo-card-template">
+    <li class="photo-card">
+      <img class="photo-card__image" src="" alt="пейзаж">
+      <button type="button" class="photo-card__button-delete"></button>
+      <div class="photo-card__background">
+        <h2 class="photo-card__title"></h2>
+        <button type="button" class="photo-card__button-heart"></button>
+      </div>
+    </li>
+  </template>
+</body>
+</html>
