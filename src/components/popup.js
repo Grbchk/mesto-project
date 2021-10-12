@@ -9,10 +9,12 @@ const openPopup = (popup) => {
 };
 
 const resetPopup = (popup) => {
-  const form = popup.querySelector('.popup__form');
-  form.reset();
-  resetError(form, formSelectors);
-  resetButton(form, formSelectors);
+  if (!popup.classList.contains('viewing-photo')) {
+    const form = popup.querySelector('.popup__form');
+    form.reset();
+    resetError(form, formSelectors);
+    resetButton(form, formSelectors);
+  }
 };
 
 const closePopup = (popup) => {

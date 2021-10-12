@@ -1,4 +1,6 @@
-export const enableValidation = ({...rest}) => {
+export { enableValidation, hideInputError };
+
+const enableValidation = ({...rest}) => {
   formEventListeners(rest);
 };
 
@@ -26,10 +28,8 @@ const isValid = (form, input, {...rest}) => {
 
 const inputEventListeners = (form, {...rest}) => {
   const inputList = Array.from(form.querySelectorAll(rest.inputSelector));
-  const button = form.querySelector(rest.submitButtonSelector);
-  const popupProfile = document.querySelector('#add-profile');
-  const profileButton = popupProfile.querySelector(rest.submitButtonSelector);
-  if (button !== profileButton) {
+  const button = form.querySelector(rest.submitButtonSelector); 
+  if (form === document.querySelector('form[name="photo-card-popup"]')) {
     toggleButtonState(inputList, button, rest);
   }
   inputList.forEach((input) => {
