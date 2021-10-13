@@ -2,10 +2,10 @@ import '../pages/index.css';
 import { profileSelectors, photoCardSelectors, formSelectors} from './selectors.js';
 import { initialCardsArray } from './initial-cards.js';
 import { enableValidation } from './validate.js';
-import { addProfileListeners } from './profile.js';
-import { popupPhotoCardListener } from './card.js';
+import { handlePopupEditProfile } from './profile.js';
+import { handlePopupAddPhoto } from './card.js';
 
-addProfileListeners(profileSelectors);
+handlePopupEditProfile(profileSelectors);
 initialCardsArray(photoCardSelectors);
-popupPhotoCardListener(photoCardSelectors);
+handlePopupAddPhoto(photoCardSelectors);
 enableValidation(formSelectors);

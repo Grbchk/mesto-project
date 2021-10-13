@@ -1,48 +1,43 @@
-import { resetError, resetButton } from './utils.js';
+import { resetError} from './utils.js';
 import { formSelectors } from './selectors.js';
-export { openPopup, closePopup, submitEvent, popupCloseButtonListeners};
+export { openPopup, closePopup, resetPopup, handleSubmitEvent, handleCloseButton};
 
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', pressEscape);
-  document.addEventListener('mousedown', clickOverlay);
+  document.addEventListener('keydown', handleEscButton);
+  document.addEventListener('mousedown', handleClickOverlay);
 };
 
 const resetPopup = (popup) => {
-  if (!popup.classList.contains('viewing-photo')) {
-    const form = popup.querySelector('.popup__form');
-    form.reset();
-    resetError(form, formSelectors);
-    resetButton(form, formSelectors);
-  }
+  const form = popup.querySelector('.popup__form');
+  form.reset();
+  resetError(form, formSelectors);
 };
 
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
-  resetPopup(popup);
-  document.removeEventListener('keydown', pressEscape);
-  document.removeEventListener('mousedown', clickOverlay);
-
+  document.removeEventListener('keydown', handleEscButton);
+  document.removeEventListener('mousedown', handleClickOverlay);
 };
 
-const submitEvent = (popup) => {
+const handleSubmitEvent = (popup) => {
   event.preventDefault();
   closePopup(popup);
 };
 
-const popupCloseButtonListeners = (popup) => {
+const handleCloseButton = (popup) => {
   popup.querySelector('.popup__close-button').addEventListener('click', () => {
-  closePopup(popup);
+    closePopup(popup);
   });
 }
 
-const pressEscape = () => {
+const handleEscButton = () => {
   if (event.key === 'Escape') {
     closePopup(document.querySelector('.popup_opened'));
   }
 }
 
-const clickOverlay = () => {
+const handleClickOverlay = () => {
   if (event.target.classList.contains('popup_opened')) {
     closePopup(document.querySelector('.popup_opened'));
   }

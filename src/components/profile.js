@@ -1,25 +1,28 @@
-import { openPopup, submitEvent, popupCloseButtonListeners} from './popup.js';
-import { addCardButtonListeners } from './card.js';
+import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
+import { handleCardAddButton } from './card.js';
+import { toggleButtonState } from './validate.js';
+import { formSelectors } from './selectors.js';
 
-export const addProfileListeners = ({...rest}) => {
-  const popup = document.querySelector(rest.popupProfile);
-  const popupTitle = document.querySelector(rest.popupProfileTitle);
-  const popupSubtitle = document.querySelector(rest.popupProfileSubtitle);
-  const title = document.querySelector(rest.profileTitle);
-  const subtitle = document.querySelector(rest.profileSubtitle);
+export const handlePopupEditProfile = ({...rest}) => {
+  const popupProfile = document.querySelector(rest.popupProfile);
+  const formProfile = popupProfile.querySelector(rest.profileForm);
+  const formTitle = formProfile.querySelector(rest.popupProfileTitle);
+  const formSubtitle = formProfile.querySelector(rest.popupProfileSubtitle);
+  const profileTitle = document.querySelector(rest.profileTitle);
+  const profileSubtitle = document.querySelector(rest.profileSubtitle);
   const editButton = document.querySelector(rest.profileEditButton);
-
   editButton.addEventListener('click', () => {
-    popupTitle.value = title.textContent;
-    popupSubtitle.value = subtitle.textContent;
-    openPopup(popup);
+    resetPopup(popupProfile);
+    formTitle.value = profileTitle.textContent;
+    formSubtitle.value = profileSubtitle.textContent;
+    toggleButtonState(formProfile, formSelectors);
+    openPopup(popupProfile);
   });
-  const form = document.querySelector(rest.profileForm);
-  form.addEventListener('submit', function () {
-    title.textContent = popupTitle.value;
-    subtitle.textContent = popupSubtitle.value;
-    submitEvent(popup);
+  formProfile.addEventListener('submit', function () {
+    profileTitle.textContent = formTitle.value;
+    profileSubtitle.textContent = formSubtitle.value;
+    handleSubmitEvent(popupProfile);
   });
-  popupCloseButtonListeners(popup);
-  addCardButtonListeners();
+  handleCloseButton(popupProfile);
+  handleCardAddButton();
 }

@@ -1,4 +1,4 @@
-export { enableValidation, hideInputError };
+export { enableValidation, hideInputError, toggleButtonState };
 
 const enableValidation = ({...rest}) => {
   formEventListeners(rest);
@@ -26,33 +26,35 @@ const isValid = (form, input, {...rest}) => {
   }
 };
 
-const inputEventListeners = (form, {...rest}) => {
-  const inputList = Array.from(form.querySelectorAll(rest.inputSelector));
-  const button = form.querySelector(rest.submitButtonSelector); 
-  if (form === document.querySelector('form[name="photo-card-popup"]')) {
-    toggleButtonState(inputList, button, rest);
-  }
-  inputList.forEach((input) => {
-    input.addEventListener('input', () => {
-      isValid(form, input, rest);
-      toggleButtonState(inputList, button, rest);
-    });
-  });
-};
-
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   })
 };
 
-const toggleButtonState = (inputList, button, {...rest}) => {
+const toggleButtonState = (form, {...rest}) => {
+  const inputList = Array.from(form.querySelectorAll(rest.inputSelector));
+  const button = form.querySelector(rest.submitButtonSelector);
   if (hasInvalidInput(inputList)) {
+    button.setAttribute('disabled', true);
     button.classList.add(rest.inactiveButtonClass);
   } else {
+    button.removeAttribute('disabled');
     button.classList.remove(rest.inactiveButtonClass);
   }
 };
+
+const inputEventListeners = (form, {...rest}) => {
+  const inputList = Array.from(form.querySelectorAll(rest.inputSelector));
+  inputList.forEach((input) => {
+    input.addEventListener('input', () => {
+      isValid(form, input, rest);
+      toggleButtonState(form, rest);
+    });
+  });
+};
+
+
 
 const formEventListeners = ({formSelector, ...rest}) => {
   const formList = Array.from(document.querySelectorAll(formSelector));
