@@ -1,6 +1,7 @@
 .photo-card__title {
   margin: 0;
   color: #000;
+  font-family: 'Inter', 'Arial', sans-serif;
   font-size: 24px;
   font-weight: 900;
   line-height: 29px;

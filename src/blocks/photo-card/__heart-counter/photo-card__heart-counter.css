@@ -1,0 +1,9 @@
+.photo-card__heart-counter {
+  visibility: hidden;
+  color: #000;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  margin-top: 3px;
+}

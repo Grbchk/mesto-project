@@ -16,11 +16,14 @@
   </header>
   <main class="main" >
     <section class="profile page__profile" aria-label="профиль">
-      <img class="profile__photo" src="<%=require('./images/profile-photo.jpg')%>" alt="фото профиля Жак-Ив Кусто">
+      <div class="profile__avatar">
+        <img class="profile__photo" src="<%=require('./images/profile-photo.jpg')%>" alt="фото профиля">
+        <button class="profile__photo-edit" type="button"></button>
+      </div>
       <div class="profile__user">
-          <h1 class="profile__title">Жак-Ив Кусто</h1>
-          <button class="profile__button-edit" type="button"></button>
-          <p class="profile__subtitle">Исследователь океана</p>
+        <h1 class="profile__title">Жак-Ив Кусто</h1>
+        <button class="profile__button-edit" type="button"></button>
+        <p class="profile__subtitle">Исследователь океана</p>
       </div>
       <button class="profile__button-add" type="button"></button>
     </section>
@@ -41,6 +44,17 @@
         <span class="popup__error popup-profile-title-error"></span>
         <input type="text" id="popup-profile-subtitle" name="profile-popup-subtitle" class="popup__item" placeholder="О себе" minlength="2" maxlength="200" required>
         <span class="popup__error popup-profile-subtitle-error"></span>
+        <button type="submit" id="save-button" class="popup__button">Сохранить</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
+  <div class="popup" id="update-avatar">
+    <div class="popup__container">
+      <form class="popup__form" name="avatar-popup">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <input type="url" id="popup-avatar-url" name="avatar-popup-url" class="popup__item" placeholder="Ссылка на картинку" required>
+        <span class="popup__error popup-avatar-url-error"></span>
         <button type="submit" id="save-button" class="popup__button">Сохранить</button>
         <button type="button" class="popup__close-button"></button>
       </form>
@@ -73,7 +87,10 @@
       <button type="button" class="photo-card__button-delete"></button>
       <div class="photo-card__background">
         <h2 class="photo-card__title"></h2>
-        <button type="button" class="photo-card__button-heart"></button>
+        <div class="photo-card__heart">
+          <button type="button" class="photo-card__button-heart"></button>
+          <span class="photo-card__heart-counter photo-card__heart-counter_active">1</span>
+        </div>
       </div>
     </li>
   </template>
