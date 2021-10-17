@@ -28,7 +28,7 @@
 @import url(../blocks/photo-card/__image/photo-card__image.css);
 @import url(../blocks/photo-card/__background/photo-card__background.css);
 @import url(../blocks/photo-card/__title/photo-card__title.css);
-@import url(../blocks/photo-card/__heart/photo-card__heart.css);
+@import url(../blocks/photo-card/__heart-container/photo-card__heart-container.css);
 @import url(../blocks/photo-card/__heart-counter/photo-card__heart-counter.css);
 @import url(../blocks/photo-card/__button-heart/photo-card__button-heart.css);
 @import url(../blocks/photo-card/__button-delete/photo-card__button-delete.css);

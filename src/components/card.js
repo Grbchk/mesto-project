@@ -1,14 +1,13 @@
 import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
-import { toggleButtonState } from './validate.js';
-import { formSelectors } from './selectors.js';
-export { addPhotoCard, handleCardAddButton, handlePopupAddPhoto};
+import { token } from './configs.js';
+export { addPhotoCard, handlePopupAddPhoto};
 
 const addViewImageData = (popup, cardData) => {
   const photo = popup.querySelector('.viewing-photo__image');
   const figcaption = popup.querySelector('.viewing-photo__figcaption');
-  photo.src = cardData.link;
-  photo.alt = cardData.name;
-  figcaption.textContent = cardData.name;
+  photo.src = `${cardData.link}`;
+  photo.alt = `${cardData.name}`;
+  figcaption.textContent = `${cardData.name}`;
 }
 
 const handleLikeButton = (photoCard, {...rest}) => {
@@ -18,24 +17,26 @@ const handleLikeButton = (photoCard, {...rest}) => {
   });
 }
 
-const handleDeleteButton = (photoCard, {...rest}) => {
+const handleLikeCounter = (photoCard, cardData, {...rest}) => {
+  const counter = photoCard.querySelector(rest.heartCounter);
+  const likes = cardData.likes.length;
+  if (likes > 0) {
+    counter.classList.add(`${rest.heartCounter}_active`);
+    counter.textContent = likes;
+  }
+}
+
+const handleDeleteButton = (photoCard, cardData, {...rest}) => {
   const button = photoCard.querySelector(rest.deleteButton);
+  if (token === cardData.id) {
+    button.classList.add(`${rest.deleteButton}_visible`);
+  }
   button.addEventListener('click', function () {
     const deletedCard = button.closest(rest.cardItem);
     deletedCard.remove();
   });
 }
 
-const handleCardAddButton = () => {
-  const popup = document.querySelector('#add-photo-card');
-  const form = popup.querySelector('.popup__form');
-  const button = document.querySelector('.profile__button-add');
-  button.addEventListener('click', () => {
-    resetPopup(popup);
-    toggleButtonState(form, formSelectors);
-    openPopup(popup);
-  });
-}
 
 const handlePhoto = (popup, cardData, image, {...rest}) => {
   image.addEventListener('click', function () {
@@ -46,15 +47,16 @@ const handlePhoto = (popup, cardData, image, {...rest}) => {
 
 const handlePhotoCard = (popup, photoCard, cardData, image, {...rest}) => {
   handleLikeButton(photoCard, rest);
-  handleDeleteButton(photoCard, rest);
+  handleLikeCounter(photoCard, cardData, rest);
+  handleDeleteButton(photoCard, cardData, rest);
   handlePhoto(popup, cardData, image, {...rest});
   handleCloseButton(popup);
 };
 
 const addCardData = (image, photoCard, cardData, {...rest}) => {
-  photoCard.querySelector(rest.cardTitle).textContent = cardData.name;
-  image.src = cardData.link;
-  image.alt = cardData.name;
+  photoCard.querySelector(rest.cardTitle).textContent = `${cardData.name}`;
+  image.src = `${cardData.link}`;
+  image.alt = `${cardData.name}`;
 }
 
 const createPhotoCard = (cardData, {...rest}) => {

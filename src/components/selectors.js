@@ -15,6 +15,7 @@ const photoCardSelectors = {
   cardTitle: '.photo-card__title',
   cardImage: '.photo-card__image',
   heartButton: '.photo-card__button-heart',
+  heartCounter: '.photo-card__heart-counter',
   deleteButton: '.photo-card__button-delete',
   popupViewingPhoto: '.viewing-photo',
   popupPhotoСard: '#add-photo-card',

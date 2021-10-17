@@ -1,5 +1,5 @@
 .photo-card__heart-counter {
-  visibility: hidden;
+  visibility: none;
   color: #000;
   font-family: 'Inter', 'Arial', sans-serif;
   font-weight: 400;

@@ -1,4 +1,4 @@
-.photo-card__heart {
+.photo-card__heart-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
