@@ -49,6 +49,7 @@
 @import url(../blocks/photo-card/__button-heart/_active/photo-card__button-heart_active.css);
 @import url(../blocks/photo-card/__heart-counter/_active/photo-card__heart-counter_active.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/__title/_reduce/popup__title_reduce.css);
 @import url(../blocks/popup/__item/_type/popup__item_type_error.css);
 @import url(../blocks/popup/__button/_disabled/popup__button_disabled.css);
 @import url(../blocks/popup/__error/_visible/popup__error_visible.css);

@@ -1,9 +1,9 @@
 import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
-import { token } from './configs.js';
+import { myProfileData } from './api.js';
 import { postCard } from './card-serve';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
-export { addPhotoCard, handlePhotoCardPopup, handleCardAddButton };
+export { addPhotoCard, handlePhotoCard, handleCardAddButton };
 
 const handleLikeButton = (photoCard, {...rest}) => {
   photoCard.querySelector(rest.heartButton).addEventListener('click', function (evt) {
@@ -20,17 +20,18 @@ const handleLikeCounter = (photoCard, cardData, {...rest}) => {
     counter.textContent = likes;
   }
 }
-
+//cardsItem.owner._id
 const handleDeleteButton = (photoCard, cardData, {...rest}) => {
   const button = photoCard.querySelector(rest.deleteButton);
-  if (token === cardData.id) {
-    button.classList.add(`${rest.deleteButton}_visible`);
-  }
-  button.addEventListener('click', () => {
-    //тут открыть попап подтверждения удаления
-    const deletedCard = button.closest(rest.cardItem);
-    deletedCard.remove();
-  });
+  // const popup = document.querySelector('#delete-photo-card');
+  // if (myProfileData._id === cardData.owner._id) {
+  //   button.classList.add(`${rest.deleteButton}_visible`);
+  // }
+  // button.addEventListener('click', () => {
+  //   openPopup(popup);
+  //   const deletedCard = button.closest(rest.cardItem);
+  //   deletedCard.remove();
+  // });
 }
 
 const addViewImageData = (popup, cardData) => {
@@ -48,7 +49,7 @@ const handlePhoto = (popup, cardData, image, {...rest}) => {
   });
 }
 
-const handlePhotoCard = (popup, photoCard, cardData, image, {...rest}) => {
+const handlePhotoCardElement = (popup, photoCard, cardData, image, {...rest}) => {
   handleLikeButton(photoCard, rest);
   handleLikeCounter(photoCard, cardData, rest);
   handleDeleteButton(photoCard, cardData, rest);
@@ -67,7 +68,7 @@ const createPhotoCard = (cardData, {...rest}) => {
   const photoCard = photoCardTemplate.querySelector(rest.cardItem).cloneNode(true);
   const popup = document.querySelector(rest.popupViewingPhoto);
   const image = photoCard.querySelector(rest.cardImage)
-  handlePhotoCard(popup, photoCard, cardData, image, rest);
+  handlePhotoCardElement(popup, photoCard, cardData, image, rest);
   addCardData(image, photoCard, cardData, rest);
   return photoCard;
 }
@@ -87,22 +88,37 @@ const handleSubmitForm = (popup, form, {...rest}) => {
       link: `${image.value}`
     }
     handleSubmitEvent(popup);
-    postCard(cardItem, rest)
-    .then((cardItem) => {
-      addPhotoCard(cardItem, rest)
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      closePopup(popup);
-      //button status
-    })
+    postCard(cardItem)
+      .then((cardItem) => {
+        addPhotoCard(cardItem, rest)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      // .finally(() => {
+      //   closePopup(popup);
+      //   //button status
+      // })
   });
 }
-//тут где-то handleDeleteForm
 
+// const handleDeleteCardForm = () => {
+//   const popup = document.querySelector('#delete-photo-card');
+//   const form = popup.querySelector('.popup__form');
+//   form.addEventListener('submit', () => {
+//     handleSubmitEvent(popup);
+//     // deletePhotoCard();
+//   })
+// }
 
+//думаю перенести это в обработчик сабмита формы удаления
+// const deleteCard = (cardsItem) => {  cardsItem.owner._id - проверить в deleteButton
+//   return fetch(`${configs.baseUrl}/cards/${cardsItem._id}`, {
+//     method: 'DELETE',
+//     headers: configs.headers,
+//   })
+//   .then(res => handlerResponse(res))
+// }
 const handleCardAddButton = (popup, form) => {  //кнопка в профиле для открытия формы
   const button = document.querySelector('.profile__button-add');
   button.addEventListener('click', () => {
@@ -112,11 +128,11 @@ const handleCardAddButton = (popup, form) => {  //кнопка в профиле
   });
 }
 
-const handlePhotoCardPopup = ({...rest}) => {
+const handlePhotoCard = ({...rest}) => {
   const popup = document.querySelector('#add-photo-card');
-  const form = popup.querySelector('.popup__form');
+  const form = popup.querySelector(rest.formSelector);
   handleSubmitForm(popup, form, rest);
-  //handleDeleteForm
+  // handleDeleteCardForm();
   handleCardAddButton(popup, form);
   handleCloseButton(popup);
 }

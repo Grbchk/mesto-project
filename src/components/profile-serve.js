@@ -1,6 +1,6 @@
 import { closePopup } from './popup.js';
 import { handlerResponse } from './utils.js';
-import { configs } from './api.js';
+import { configs, myProfileData } from './api.js';
 export { handleProfileData, addProfileData };
 
 
@@ -12,8 +12,9 @@ const getProfile = () => {
 };
 
 const addProfileData = (popupTitle, popupSubtitle) => {
-  getProfile() //тут можно взять мой id
+  getProfile()
   .then(profileData => {
+    myProfileData = profileData;
     popupTitle.textContent = profileData.name;
     popupSubtitle.textContent = profileData.about;
   })

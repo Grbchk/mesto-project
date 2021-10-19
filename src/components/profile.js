@@ -1,10 +1,8 @@
 import { openPopup, resetPopup, handleCloseButton, handleSubmitEvent} from './popup.js';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
-// import { handleAvatarEditButton } from './profile-avatar.js';
-// import { handleCardAddButton } from './card.js';
 import { handleProfileData, addProfileData } from './profile-serve.js';
-export { handleProfilePopup };
+export { handleProfile };
 
 
 const handleEditButton = (popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle, {...rest}) => {
@@ -25,7 +23,7 @@ const handleProfileForm = (popup, form, formTitle, formSubtitle, popupTitle, pop
   });
 }
 
-const handleProfilePopup = ({...rest}) => {
+const handleProfile = ({...rest}) => {
   const popup = document.querySelector(rest.popupProfile);
   const form = popup.querySelector(rest.formSelector);
   const formTitle = form.querySelector(rest.popupProfileTitle);
@@ -37,10 +35,4 @@ const handleProfilePopup = ({...rest}) => {
   handleEditButton(popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle, rest);
   handleCloseButton(popup);
 }
-
-// const handleProfile = ({...rest}) => {
-//   handleProfilePopup(rest);
-//   handleCardAddButton();
-//   handleAvatarEditButton();
-// }
 

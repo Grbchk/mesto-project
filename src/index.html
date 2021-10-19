@@ -62,13 +62,22 @@
   </div>
   <div class="popup" id="add-photo-card">
     <div class="popup__container">
-      <form class="popup__form" name="photo-card-popup">
+      <form class="popup__form" name="add-photo-card-popup">
         <h2 class="popup__title">Новое место</h2>
         <input type="text" id="popup-photo-title" name="photo-card-title" class="popup__item" placeholder="Название" minlength="2" maxlength="30" required>
         <span class="popup__error popup-photo-title-error"></span>
         <input type="url" id="popup-photo-subtitle" name="photo-card-subtitle" class="popup__item" placeholder="Ссылка на картинку" required>
         <span class="popup__error popup-photo-subtitle-error"></span>
         <button type="submit" id="save-button" class="popup__button">Создать</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
+  <div class="popup" id="delete-photo-card">
+    <div class="popup__container">
+      <form class="popup__form" name="delete-photo-card-popup">
+        <h2 class="popup__title popup__title_reduce">Вы уверены?</h2>
+        <button type="submit" id="save-button" class="popup__button">Да</button>
         <button type="button" class="popup__close-button"></button>
       </form>
     </div>

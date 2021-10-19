@@ -27,7 +27,7 @@ const getArrayCards = ({...rest}) => {
   })
 };
 
-const postCard = (cardsItem, {...rest}) => {
+const postCard = (cardsItem) => {
   return fetch(`${configs.baseUrl}/cards`, {
     method: 'POST',
     headers: configs.headers,
@@ -39,11 +39,4 @@ const postCard = (cardsItem, {...rest}) => {
   .then(res => handlerResponse(res))
 }
 
-//думаю перенести это в обработчик сабмита формы удаления
-// const deleteCard = (cardsItem) => {  cardsItem.owner._id - проверить в deleteButton
-//   return fetch(`${configs.baseUrl}/cards/${cardsItem._id}`, {
-//     method: 'DELETE',
-//     headers: configs.headers,
-//   })
-//   .then(res => handlerResponse(res))
-// }
+
