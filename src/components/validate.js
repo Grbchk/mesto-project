@@ -16,7 +16,6 @@ const hideInputError = (input, errorElement, {...rest}) => {
   errorElement.textContent = '';
 };
 
-
 const isValid = (form, input, {...rest}) => {
   const errorElement = form.querySelector(`.${input.id}-error`);
   if (!input.validity.valid) {
@@ -53,8 +52,6 @@ const inputEventListeners = (form, {...rest}) => {
     });
   });
 };
-
-
 
 const formEventListeners = ({formSelector, ...rest}) => {
   const formList = Array.from(document.querySelectorAll(formSelector));

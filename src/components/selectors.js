@@ -1,7 +1,7 @@
 export { profileSelectors, photoCardSelectors, formSelectors};
 
 const profileSelectors = {
-  profileForm: '.popup__form',
+  formSelector: '.popup__form',
   profileTitle: '.profile__title',
   profileSubtitle: '.profile__subtitle',
   profileEditButton: '.profile__button-edit',
@@ -21,7 +21,7 @@ const photoCardSelectors = {
   popupPhotoСard: '#add-photo-card',
   popupTitle: '#popup-photo-title ',
   popupImageLink: '#popup-photo-subtitle',
-  photoCardForm: '.popup__form',
+  formSelector: '.popup__form',
   photoCardPlace: '.photo-grid__list',
 }
 

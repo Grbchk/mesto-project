@@ -1,39 +1,46 @@
-import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
+import { openPopup, resetPopup, handleCloseButton, handleSubmitEvent} from './popup.js';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
+// import { handleAvatarEditButton } from './profile-avatar.js';
+// import { handleCardAddButton } from './card.js';
+import { handleProfileData, addProfileData } from './profile-serve.js';
+export { handleProfilePopup };
 
 
-const handleCardAddButton = () => {
-  const popup = document.querySelector('#add-photo-card');
-  const form = popup.querySelector('.popup__form');
-  const button = document.querySelector('.profile__button-add');
-  button.addEventListener('click', () => {
-    resetPopup(popup);
+const handleEditButton = (popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle, {...rest}) => {
+  const editButton = document.querySelector(rest.profileEditButton);
+  editButton.addEventListener('click', () => {
+    formTitle.value = popupTitle.textContent;
+    formSubtitle.value = popupSubtitle.textContent;
     toggleButtonState(form, formSelectors);
+    resetPopup(popup);
     openPopup(popup);
   });
 }
 
-export const handlePopupEditProfile = ({...rest}) => {
-  const popupProfile = document.querySelector(rest.popupProfile);
-  const formProfile = popupProfile.querySelector(rest.profileForm);
-  const formTitle = formProfile.querySelector(rest.popupProfileTitle);
-  const formSubtitle = formProfile.querySelector(rest.popupProfileSubtitle);
-  const profileTitle = document.querySelector(rest.profileTitle);
-  const profileSubtitle = document.querySelector(rest.profileSubtitle);
-  const editButton = document.querySelector(rest.profileEditButton);
-  editButton.addEventListener('click', () => {
-    resetPopup(popupProfile);
-    formTitle.value = profileTitle.textContent;
-    formSubtitle.value = profileSubtitle.textContent;
-    toggleButtonState(formProfile, formSelectors);
-    openPopup(popupProfile);
+const handleProfileForm = (popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle) => {
+  form.addEventListener('submit', () => {
+    handleProfileData(popup, formTitle, formSubtitle, popupTitle, popupSubtitle);
+    handleSubmitEvent(popup);
   });
-  formProfile.addEventListener('submit', function () {
-    profileTitle.textContent = formTitle.value;
-    profileSubtitle.textContent = formSubtitle.value;
-    handleSubmitEvent(popupProfile);
-  });
-  handleCloseButton(popupProfile);
-  handleCardAddButton();
 }
+
+const handleProfilePopup = ({...rest}) => {
+  const popup = document.querySelector(rest.popupProfile);
+  const form = popup.querySelector(rest.formSelector);
+  const formTitle = form.querySelector(rest.popupProfileTitle);
+  const formSubtitle = form.querySelector(rest.popupProfileSubtitle);
+  const popupTitle = document.querySelector(rest.profileTitle);
+  const popupSubtitle = document.querySelector(rest.profileSubtitle);
+  addProfileData(popupTitle, popupSubtitle);
+  handleProfileForm(popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle);
+  handleEditButton(popup, form, formTitle, formSubtitle, popupTitle, popupSubtitle, rest);
+  handleCloseButton(popup);
+}
+
+// const handleProfile = ({...rest}) => {
+//   handleProfilePopup(rest);
+//   handleCardAddButton();
+//   handleAvatarEditButton();
+// }
+

@@ -1,14 +1,9 @@
 import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
 import { token } from './configs.js';
-export { addPhotoCard, handlePopupAddPhoto};
-
-const addViewImageData = (popup, cardData) => {
-  const photo = popup.querySelector('.viewing-photo__image');
-  const figcaption = popup.querySelector('.viewing-photo__figcaption');
-  photo.src = `${cardData.link}`;
-  photo.alt = `${cardData.name}`;
-  figcaption.textContent = `${cardData.name}`;
-}
+import { postCard } from './card-serve';
+import { formSelectors } from './selectors.js';
+import { toggleButtonState } from './validate.js';
+export { addPhotoCard, handlePhotoCardPopup, handleCardAddButton };
 
 const handleLikeButton = (photoCard, {...rest}) => {
   photoCard.querySelector(rest.heartButton).addEventListener('click', function (evt) {
@@ -31,15 +26,23 @@ const handleDeleteButton = (photoCard, cardData, {...rest}) => {
   if (token === cardData.id) {
     button.classList.add(`${rest.deleteButton}_visible`);
   }
-  button.addEventListener('click', function () {
+  button.addEventListener('click', () => {
+    //тут открыть попап подтверждения удаления
     const deletedCard = button.closest(rest.cardItem);
     deletedCard.remove();
   });
 }
 
+const addViewImageData = (popup, cardData) => {
+  const photo = popup.querySelector('.viewing-photo__image');
+  const figcaption = popup.querySelector('.viewing-photo__figcaption');
+  photo.src = `${cardData.link}`;
+  photo.alt = `${cardData.name}`;
+  figcaption.textContent = `${cardData.name}`;
+}
 
 const handlePhoto = (popup, cardData, image, {...rest}) => {
-  image.addEventListener('click', function () {
+  image.addEventListener('click', () => {
     addViewImageData(popup, cardData, rest);
     openPopup(popup);
   });
@@ -74,18 +77,46 @@ const addPhotoCard = (cardData, {...rest}) => {
   document.querySelector(rest.photoCardPlace).prepend(card);
 };
 
-const handlePopupAddPhoto = ({...rest}) => {
-  const popup = document.querySelector(rest.popupPhotoСard);
-  const form = popup.querySelector(rest.photoCardForm);
+
+const handleSubmitForm = (popup, form, {...rest}) => {
   form.addEventListener('submit', () => {
     const title = form.querySelector(rest.popupTitle);
     const image = form.querySelector(rest.popupImageLink);
-    const name = title.value;
-    const link = image.value;
-    addPhotoCard({name, link}, rest);
+    const cardItem = {
+      name: `${title.value}`,
+      link: `${image.value}`
+    }
     handleSubmitEvent(popup);
+    postCard(cardItem, rest)
+    .then((cardItem) => {
+      addPhotoCard(cardItem, rest)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      closePopup(popup);
+      //button status
+    })
   });
-  handleCloseButton(popup);
+}
+//тут где-то handleDeleteForm
+
+
+const handleCardAddButton = (popup, form) => {  //кнопка в профиле для открытия формы
+  const button = document.querySelector('.profile__button-add');
+  button.addEventListener('click', () => {
+    toggleButtonState(form, formSelectors);
+    resetPopup(popup);
+    openPopup(popup);
+  });
 }
 
-
+const handlePhotoCardPopup = ({...rest}) => {
+  const popup = document.querySelector('#add-photo-card');
+  const form = popup.querySelector('.popup__form');
+  handleSubmitForm(popup, form, rest);
+  //handleDeleteForm
+  handleCardAddButton(popup, form);
+  handleCloseButton(popup);
+}

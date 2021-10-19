@@ -1,3 +1,32 @@
 .profile__photo-edit {
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  min-width: 120px;
+  min-height: 120px;
+  background: url(../../../images/profile-edit-button.svg) no-repeat center center;
+  background-color: rgba(0, 0, 0, .8);
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  transition: all .35s;
+}
 
+@media screen and (max-width: 690px) {
+  .profile__photo-edit {
+    min-width: 200px;
+    min-height: 200px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .profile__photo-edit {
+    min-width: 120px;
+    min-height: 120px;
+  }
+}
+
+.profile__avatar:hover .profile__photo-edit {
+  opacity: 100%;
 }

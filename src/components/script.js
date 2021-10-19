@@ -1,13 +1,14 @@
 import '../pages/index.css';
-import { getArrayCards } from './cards-array.js';
 import { profileSelectors, photoCardSelectors, formSelectors} from './selectors.js';
+import { handleProfilePopup } from './profile.js';
+import { handlePhotoCardPopup } from './card.js';
 import { enableValidation } from './validate.js';
-import { handlePopupEditProfile } from './profile.js';
-import { handlePopupAddPhoto } from './card.js';
+import { getArrayCards } from './card-serve.js';
 
-handlePopupEditProfile(profileSelectors);
 
-handlePopupAddPhoto(photoCardSelectors);
+
+handleProfilePopup(profileSelectors);
+handlePhotoCardPopup(photoCardSelectors);
 enableValidation(formSelectors);
-
 getArrayCards(photoCardSelectors);
+

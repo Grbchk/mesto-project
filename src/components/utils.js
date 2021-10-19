@@ -1,5 +1,5 @@
 import { hideInputError } from './validate.js';
-export { resetError };
+export { resetError, handlerResponse };
 
 
 const resetError = (form, {...rest}) => {
@@ -10,4 +10,10 @@ const resetError = (form, {...rest}) => {
   });
 }
 
+const handlerResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
 
