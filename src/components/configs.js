@@ -1,5 +1,5 @@
 export { token, cohort, url };
 
-const token = '4c7c165a-daa4-45f5-aede-122259c7068a';
-const cohort = 'plus-cohort-2';
+const token = '001ad720-6ef4-4b0d-b9d3-4ac6fa30aca0';
+const cohort = 'plus-cohort-4';
 const url = 'https://mesto.nomoreparties.co/v1/'+cohort;
