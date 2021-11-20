@@ -103,7 +103,7 @@ const handleSubmitForm = (popup, form, {...rest}) => {
     }
     handleSubmitEvent(popup);
     postCard(cardItem)
-      .then((cardItem) => {
+      .then((cardItem) => {  //добавить if else?
         addPhotoCard(cardItem, rest)
       })
       .catch((error) => {
@@ -120,7 +120,7 @@ const handleDeleteCardForm = () => {
   const popup = document.querySelector('#delete-photo-card');
   const form = popup.querySelector('.popup__form');
   form.addEventListener('submit', () => {
-    handleSubmitEvent(popup);
+    // handleSubmitEvent(popup);
     // deletePhotoCard();
   })
 }
