@@ -1,5 +1,5 @@
 import { token, url } from './configs.js';
-export { configs, myProfileData };
+export { configs };
 
 const configs = {
   baseUrl: url,
@@ -9,6 +9,6 @@ const configs = {
   }
 };
 
-let myProfileData = none;
+
 
 

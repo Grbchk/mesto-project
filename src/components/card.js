@@ -1,6 +1,6 @@
 import { openPopup, resetPopup, handleSubmitEvent, handleCloseButton} from './popup.js';
-import { myProfileData } from './api.js';
 import { postCard } from './card-serve';
+import { getProfile } from './profile-serve';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
 export { addPhotoCard, handlePhotoCard, handleCardAddButton };
@@ -20,19 +20,33 @@ const handleLikeCounter = (photoCard, cardData, {...rest}) => {
     counter.textContent = likes;
   }
 }
-//cardsItem.owner._id
-const handleDeleteButton = (photoCard, cardData, {...rest}) => {
-  const button = photoCard.querySelector(rest.deleteButton);
-  // const popup = document.querySelector('#delete-photo-card');
-  // if (myProfileData._id === cardData.owner._id) {
-  //   button.classList.add(`${rest.deleteButton}_visible`);
-  // }
-  // button.addEventListener('click', () => {
-  //   openPopup(popup);
-  //   const deletedCard = button.closest(rest.cardItem);
-  //   deletedCard.remove();
-  // });
-}
+/*
+// const deletePhotoCard = (button, {...rest}) => {
+//   const button = document.querySelector('.photo-card__button-delete');
+//   const popup = document.querySelector('#delete-photo-card');
+//   button.classList.add('.photo-card__button-delete_visible');
+
+//   button.addEventListener('click', () => {
+//     openPopup(popup);
+//     const deletedCard = button.closest(rest.cardItem);
+//     deletedCard.remove();
+//   });
+// }
+
+// const handleDeleteButton = (photoCard, cardData, {...rest}) => {
+//   getProfile()
+//   .then(profileData => {
+//     if (profileData._id === cardData.owner._id) {
+//       deletePhotoCard(photoCard, rest);
+//     }
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   })
+
+сделать хоть как-то, чтобы работало, оптимизация в самом конце
+// }
+*/
 
 const addViewImageData = (popup, cardData) => {
   const photo = popup.querySelector('.viewing-photo__image');
@@ -102,14 +116,14 @@ const handleSubmitForm = (popup, form, {...rest}) => {
   });
 }
 
-// const handleDeleteCardForm = () => {
-//   const popup = document.querySelector('#delete-photo-card');
-//   const form = popup.querySelector('.popup__form');
-//   form.addEventListener('submit', () => {
-//     handleSubmitEvent(popup);
-//     // deletePhotoCard();
-//   })
-// }
+const handleDeleteCardForm = () => {
+  const popup = document.querySelector('#delete-photo-card');
+  const form = popup.querySelector('.popup__form');
+  form.addEventListener('submit', () => {
+    handleSubmitEvent(popup);
+    // deletePhotoCard();
+  })
+}
 
 //думаю перенести это в обработчик сабмита формы удаления
 // const deleteCard = (cardsItem) => {  cardsItem.owner._id - проверить в deleteButton
