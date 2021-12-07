@@ -1,4 +1,4 @@
-import { changeButtonText, closePopup, openPopup, handlePopupCloseButton } from './popup.js';
+import { changeButtonText, closePopup, openPopup } from './popup.js';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
 import { patchProfileData } from './api.js';
@@ -38,7 +38,6 @@ const updateProfileData = (defaultText, submitButton, popup, formTitle, formSubt
 
 //---(назначаем действия при сабмите формы редактирования профиля, запускаем обработчик кнопки ее закрытия)---
 const handleProfileForm = (popup, form, formTitle, formSubtitle, profileTitle, profileSubtitle) => {
-  handlePopupCloseButton(popup);
   form.addEventListener('submit', (evt) => {
     const submitButton = form.querySelector('.popup__button');
     const defaultText = submitButton.textContent;

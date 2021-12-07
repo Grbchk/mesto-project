@@ -1,4 +1,4 @@
-import { changeButtonText, closePopup, openPopup, resetPopup, handlePopupCloseButton } from './popup.js';
+import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
 import { patchAvatar } from './api.js';
@@ -33,7 +33,6 @@ const updateAvatar = (defaultText, submitButton, popup, formTitle, image) => {
 }
 
 const handleAddAvatarForm = (popup, form, formTitle, image) => {
-  handlePopupCloseButton(popup);
   form.addEventListener('submit', (evt) => {
     const submitButton = form.querySelector('.popup__button');
     const defaultText = submitButton.textContent;

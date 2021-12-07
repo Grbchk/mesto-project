@@ -1,4 +1,4 @@
-import { changeButtonText, closePopup, openPopup, resetPopup, handleSubmitEvent, handlePopupCloseButton } from './popup.js';
+import { changeButtonText, closePopup, openPopup, resetPopup, handleSubmitEvent } from './popup.js';
 import { getCards, putLike, deleteLike, deleteCard, postCardData } from './api.js';
 import { formSelectors } from './selectors.js';
 import { toggleButtonState } from './validate.js';
@@ -115,7 +115,7 @@ const handleDeleteCardForm = (popup, photoCard, cardData) => {
 //---(показываем кнопку удаления на созданных мной карточках после проверки)---
 const showDeleteButton = (cardData, profile, button) => {
   if (profile._id === cardData.owner._id) {
-    button.classList.add('photo-card__button-delete_visible');  //не работает ${rest.deleteButton}_visible из-за точки
+    button.classList.add('photo-card__button-delete_visible');
   }
 }
 
@@ -126,7 +126,6 @@ const handleDeleteButton = (photoCard, cardData, profile, {...rest}) => {
   showDeleteButton(cardData, profile, button);
   button.addEventListener('click', () => {  //вызывать обработчик формы только при клике по кнопке, или при создании карточки?
     handleDeleteCardForm(popup, photoCard, cardData);
-    handlePopupCloseButton(popup);
     openPopup(popup); //reset тут не нужен, т.к. нет полей у формы
   })
 }
@@ -145,7 +144,6 @@ const handlePhoto = (cardData, image, {...rest}) => {
   const popup = document.querySelector(rest.popupViewingPhoto);
   image.addEventListener('click', () => {
     addViewImageData(popup, cardData, rest);
-    handlePopupCloseButton(popup);
     openPopup(popup);
   })
 }
@@ -179,7 +177,7 @@ const createPhotoCard = (cardData, profile, {...rest}) => {
 //---(добавляем обработанную фотокарточку в разметку)---
 const addPhotoCard = (cardData, profile, {...rest}) => {
   const card = createPhotoCard(cardData, profile, rest);
-  document.querySelector(rest.photoCardPlace).append(card); //можно поправить на append(?)
+  document.querySelector(rest.photoCardPlace).prepend(card);
 }
 
 //---(запускаем добавление начальных карточек и отрисовку моих лайков)---
@@ -207,7 +205,6 @@ const addNewCard = (defaultText, submitButton, popup, cardData, profile, {...res
 
 //---(формируем cardData из заполненных полей формы и передаем их при событии submit, вызываем обработчик кнопки закрытия)---
 const handleAddCardForm = (popup, form, profile, {...rest}) => {
-  handlePopupCloseButton(popup);
   form.addEventListener('submit', (evt) => {
     const submitButton = form.querySelector('.popup__button');
     const defaultText = submitButton.textContent;
@@ -241,3 +238,4 @@ const handleCards = (cards, profile, {...rest}) => {
   handleCardAddButton(popup, form);
   addInitialCards(cards, profile, rest);
 }
+

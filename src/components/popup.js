@@ -31,10 +31,18 @@ const handleSubmitEvent = (popup) => {
   closePopup(popup);
 };
 
-const handlePopupCloseButton = (popup) => {
+const addCloseButtonListener = (popup) => {
   popup.querySelector('.popup__close-button').addEventListener('click', () => {
     closePopup(popup);
   });
+}
+
+const handlePopupCloseButton = () => {
+  const popupList = Array.from(document.querySelectorAll('.popup'));
+  popupList.push(document.querySelector('.viewing-photo'));
+  popupList.forEach((popup) => {
+    addCloseButtonListener(popup);
+  })
 }
 
 const handleEscButton = () => {
