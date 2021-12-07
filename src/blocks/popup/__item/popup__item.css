@@ -1,7 +1,7 @@
 .popup__item {
   border: 0;
   outline: none;
-  font-family: inherit;
+  font-family: 'Inter', 'Arial', sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 17px;

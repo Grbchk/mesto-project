@@ -1,6 +1,6 @@
-import { resetError} from './utils.js';
+import { resetError } from './utils.js';
 import { formSelectors } from './selectors.js';
-export { openPopup, closePopup, resetPopup, handleSubmitEvent, handleCloseButton};
+export { openPopup, closePopup, resetPopup, handleSubmitEvent, handlePopupCloseButton, changeButtonText };
 
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
@@ -20,12 +20,18 @@ const closePopup = (popup) => {
   document.removeEventListener('mousedown', handleClickOverlay);
 };
 
+//---(добавляет кнопке три точки при сабмите формы)---
+const changeButtonText = (submitButton) => {
+  submitButton.textContent = `${submitButton.textContent}...`;
+};
+
+//---(отменяет поведение по-умолчанию при сабмите формы)---
 const handleSubmitEvent = (popup) => {
   event.preventDefault();
   closePopup(popup);
 };
 
-const handleCloseButton = (popup) => {
+const handlePopupCloseButton = (popup) => {
   popup.querySelector('.popup__close-button').addEventListener('click', () => {
     closePopup(popup);
   });
