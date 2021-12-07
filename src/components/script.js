@@ -1,14 +1,7 @@
 import '../pages/index.css';
-import { profileSelectors, photoCardSelectors, formSelectors} from './selectors.js';
-import { handleProfile } from './profile.js';
-import { handlePhotoCard } from './card.js';
+import { formSelectors } from './selectors.js';
 import { enableValidation } from './validate.js';
-import { getArrayCards } from './card-serve.js';
+import { getInitialData } from './api.js';
 
-
-
-handleProfile(profileSelectors);
-handlePhotoCard(photoCardSelectors);
+getInitialData();
 enableValidation(formSelectors);
-getArrayCards(photoCardSelectors);
-
