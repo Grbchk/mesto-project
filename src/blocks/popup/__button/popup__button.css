@@ -2,9 +2,10 @@
   background-color: #000;
   cursor: pointer;
   color: white;
+  font-family: 'Inter', 'Arial', sans-serif;
   font-size: 18px;
   font-weight: normal;
-  line-height: 22px;
+  line-height: 18px;
   border: none;
   border-radius: 2px 2px 2px 2px;
   padding-bottom: 18px;

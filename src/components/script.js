@@ -1,11 +1,7 @@
 import '../pages/index.css';
-import { profileSelectors, photoCardSelectors, formSelectors} from './selectors.js';
-import { initialCardsArray } from './initial-cards.js';
+import { formSelectors } from './selectors.js';
 import { enableValidation } from './validate.js';
-import { handlePopupEditProfile } from './profile.js';
-import { handlePopupAddPhoto } from './card.js';
+import { getInitialData } from './api.js';
 
-handlePopupEditProfile(profileSelectors);
-initialCardsArray(photoCardSelectors);
-handlePopupAddPhoto(photoCardSelectors);
+getInitialData();
 enableValidation(formSelectors);

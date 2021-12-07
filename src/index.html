@@ -16,11 +16,14 @@
   </header>
   <main class="main" >
     <section class="profile page__profile" aria-label="профиль">
-      <img class="profile__photo" src="<%=require('./images/profile-photo.jpg')%>" alt="фото профиля Жак-Ив Кусто">
+      <div class="profile__avatar">
+        <img class="profile__photo" src="" alt="profile avatar">
+        <button class="profile__photo-edit" type="button"></button>
+      </div>
       <div class="profile__user">
-          <h1 class="profile__title">Жак-Ив Кусто</h1>
-          <button class="profile__button-edit" type="button"></button>
-          <p class="profile__subtitle">Исследователь океана</p>
+        <h1 class="profile__title"></h1>
+        <button class="profile__button-edit" type="button"></button>
+        <p class="profile__subtitle"></p>
       </div>
       <button class="profile__button-add" type="button"></button>
     </section>
@@ -46,9 +49,20 @@
       </form>
     </div>
   </div>
+  <div class="popup" id="update-avatar">
+    <div class="popup__container">
+      <form class="popup__form" name="avatar-popup">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <input type="url" id="popup-avatar-url" name="avatar-popup-url" class="popup__item" placeholder="Ссылка на картинку" required>
+        <span class="popup__error popup-avatar-url-error"></span>
+        <button type="submit" id="save-button" class="popup__button">Сохранить</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
   <div class="popup" id="add-photo-card">
     <div class="popup__container">
-      <form class="popup__form" name="photo-card-popup">
+      <form class="popup__form" name="add-photo-card-popup">
         <h2 class="popup__title">Новое место</h2>
         <input type="text" id="popup-photo-title" name="photo-card-title" class="popup__item" placeholder="Название" minlength="2" maxlength="30" required>
         <span class="popup__error popup-photo-title-error"></span>
@@ -59,9 +73,18 @@
       </form>
     </div>
   </div>
-  <div class="viewing-photo">
+  <div class="popup" id="delete-photo-card">
+    <div class="popup__container">
+      <form class="popup__form" name="delete-photo-card-popup">
+        <h2 class="popup__title popup__title_reduce">Вы уверены?</h2>
+        <button type="submit" id="save-button" class="popup__button">Да</button>
+        <button type="button" class="popup__close-button"></button>
+      </form>
+    </div>
+  </div>
+  <div class="viewing-photo" id="popup-viewing-photo">
     <figure class="viewing-photo__container">
-      <img class="viewing-photo__image" src="" alt="пейзаж">
+      <img class="viewing-photo__image" src="" alt="">
       <figcaption class="viewing-photo__figcaption"></figcaption>
       <button type="button" class="popup__close-button"></button>
     </figure>
@@ -73,7 +96,10 @@
       <button type="button" class="photo-card__button-delete"></button>
       <div class="photo-card__background">
         <h2 class="photo-card__title"></h2>
-        <button type="button" class="photo-card__button-heart"></button>
+        <div class="photo-card__heart-container">
+          <button type="button" class="photo-card__button-heart"></button>
+          <span class="photo-card__heart-counter"></span>
+        </div>
       </div>
     </li>
   </template>
