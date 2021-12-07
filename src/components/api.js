@@ -1,18 +1,18 @@
-import { token, url } from './configs.js';
+import { configs } from './configs.js';
 import { profileSelectors, photoCardSelectors } from './selectors.js';
-import { handleResponse } from './utils.js';
 import { handleProfile } from './profile.js';
 import { handleAvatar } from './profile-avatar.js';
 import { handleCards } from './card.js';
 export { postCardData, patchAvatar, patchProfileData, getInitialData, getCards, putLike, deleteLike, deleteCard };
 
-const configs = {
-  baseUrl: url,
-  headers: {
-    authorization: token,
-    'Content-Type': 'application/json',
+
+//---(обрабатываем ответ от сервера)---
+const handleResponse = (res) => {
+  if (res.ok) {
+    return res.json();
   }
-};
+  return Promise.reject(`Ошибка: ${res.status}`); //этот промис отклонен, отправит в catch
+}
 
 //---(по сабмиту формы отправляем данные карточки на сервер)---
 const postCardData = (cardData) => {

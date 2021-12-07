@@ -1,5 +1,5 @@
 import { hideInputError } from './validate.js';
-export { resetError, handleResponse };
+export { resetError };
 
 //---(убираем сообщения об ошибке в инпутах формы)---
 const resetError = (form, {...rest}) => {
@@ -8,13 +8,5 @@ const resetError = (form, {...rest}) => {
     const errorElement = form.querySelector(`.${input.id}-error`);
     hideInputError(input, errorElement, rest);
   });
-}
-
-//---(обрабатываем ответ от сервера)---
-const handleResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`); //этот промис отклонен, отправит в catch
 }
 
