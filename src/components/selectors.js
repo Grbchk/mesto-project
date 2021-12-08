@@ -22,6 +22,7 @@ const photoCardSelectors = {
   deleteButton: '.photo-card__button-delete',
   popupViewingPhoto: '.viewing-photo',
   popupAddPhoto: '#add-photo-card',
+  popupDeletePhoto: '#delete-photo-card',
   popupTitle: '#popup-photo-title ',
   popupImageLink: '#popup-photo-subtitle',
   photoCardPlace: '.photo-grid__list'

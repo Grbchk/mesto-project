@@ -1,7 +1,7 @@
-import { changeButtonText, closePopup, openPopup, resetPopup, handleSubmitEvent } from './popup.js';
+import { changeButtonText, closePopup, openPopup, resetPopup, addCloseButtonListener } from './popup.js';
 import { getCards, putLike, deleteLike, deleteCard, postCardData } from './api.js';
 import { formSelectors } from './selectors.js';
-import { toggleButtonState } from './validate.js';
+import { toggleSubmitButtonState } from './validate.js';
 export { addPhotoCard, handleCards, handleCardAddButton };
 
 //---(подсчитываем и отображаем количество лайков на фотокарточке)---
@@ -69,7 +69,7 @@ const getNewCardData = (eventTarget, cardData, photoCard, profile, {...rest}) =>
   .then((cards) => {
     const newCardData = cards.filter((card) => {
       if (card._id === cardData._id) { return card }
-    });
+    })
     handleClickEvent(eventTarget, newCardData[0], photoCard, profile, rest);
   })
   .catch((error) => {
@@ -88,45 +88,83 @@ const handleLikeButton = (photoCard, cardData, profile, {...rest}) => {
 
 //---(удаляем карточку из разметки)---
 const removeDeletedCard = (photoCard) => {
-  // photoCard.parentNode.removeChild(photoCard);
   photoCard.remove();
 }
 
 //---(обрабатываем запрос на удаление карточки с сервера)---
-const deletePhotoCard = (photoCard, cardData) => {
-  deleteCard(cardData._id)
+const deletePhotoCard = (cardID, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
+  deleteCard(cardID)
     .then(() => {
-      removeDeletedCard(photoCard);
+      removeDeletedCard(cardItem);
+      closePopup(popup);
     })
     .catch((error) => {  //примет сообщение об ошибке при Promise.reject
       console.log(error);
+      alert('Произошла какая-то ошибка. Попробуйте снова.')
+    })
+    .finally(() => {
+      submitButton.textContent = defaultText;
     })
 }
 
-//---(инициируем удаление карточки и закрываем попап подтверждения при событии submit)---
-const handleDeleteCardForm = (popup, photoCard, cardData) => {
-  const form = popup.querySelector('.popup__form');
-  form.addEventListener('submit', () => {
-    deletePhotoCard(photoCard, cardData);
-    handleSubmitEvent(popup);
-  })
-}
-
-//---(показываем кнопку удаления на созданных мной карточках после проверки)---
+//---(отрисовываем кнопку удаления на ранее созданных мной карточках)---
 const showDeleteButton = (cardData, profile, button) => {
   if (profile._id === cardData.owner._id) {
     button.classList.add('photo-card__button-delete_visible');
   }
 }
 
-//---(инициируем проверку владельца карточки и открываем попап подтверждения при клике кнопки удаления карточки)---
+
+//---(инициируем удаление карточки и закрываем попап подтверждения при событии submit)---
+const handleDeleteCardForm = (popup) => {
+  const form = popup.querySelector('.popup__form');
+  const submitButton = form.querySelector('.popup__button');
+  const defaultText = submitButton.textContent;
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    changeButtonText(submitButton);
+    // deletePhotoCard(cardId, cardItem, submitButton, defaultText);
+//сюда надо передавать данные для удаления
+
+  })
+}
+// addCloseButtonListener(popup);
+
+// const handleDeleteCardPopupCloseEvent = (popup) => {
+//   popup.querySelector('.popup__close-button').addEventListener('click', () => {
+//     // closePopup(popup);
+//   });
+//   if (event.key === 'Escape') {
+//     // closePopup(document.querySelector('.popup_opened'));
+//   }
+// }
+const openDeleteCardPopup = (popup) => {
+  popup.classList.add('popup_opened');
+
+  handleDeleteCardPopup(popup);
+};
+const openPopup = (popup) => {
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleEscButton);
+  document.addEventListener('mousedown', handleClickOverlay);
+};
+const closePopup = (popup) => {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleEscButton);
+  document.removeEventListener('mousedown', handleClickOverlay);
+};
+
+
+//открываем попап и передаем данные кликнутой карточки
+//---(вызываем функцию отрисовки иконки удаления)---
 const handleDeleteButton = (photoCard, cardData, profile, {...rest}) => {
+  const popup = document.querySelector(rest.popupDeletePhoto);
   const button = photoCard.querySelector(rest.deleteButton);
-  const popup = document.querySelector('#delete-photo-card');
   showDeleteButton(cardData, profile, button);
-  button.addEventListener('click', () => {  //вызывать обработчик формы только при клике по кнопке, или при создании карточки?
-    handleDeleteCardForm(popup, photoCard, cardData);
-    openPopup(popup); //reset тут не нужен, т.к. нет полей у формы
+  button.addEventListener('click', () => {
+    dataForDeleteCard.cardId = cardData._id;
+    dataForDeleteCard.cardItem = photoCard;
+    openDeleteCardPopup(popup);
   })
 }
 
@@ -139,7 +177,7 @@ const addViewImageData = (popup, cardData) => {
   figcaption.textContent = cardData.name;
 }
 
-//---(открываем попап просмотра при клике по фото и вызываем обработчики)---
+//---(открываем попап просмотра карточки при клике по фото и вызываем обработчик)---
 const handlePhoto = (cardData, image, {...rest}) => {
   const popup = document.querySelector(rest.popupViewingPhoto);
   image.addEventListener('click', () => {
@@ -159,7 +197,7 @@ const handlePhotoCardElements = (photoCard, cardData, image, profile, {...rest})
 
 //---(заполняем поля фотокарточки из полученных с сервера данных)---
 const addPhotoCardData = (image, photoCard, cardData, {...rest}) => {
-  photoCard.querySelector(rest.cardTitle).textContent = cardData.name; //заголовок карточки
+  photoCard.querySelector(rest.cardTitle).textContent = cardData.name;
   image.src = cardData.link;
   image.alt = cardData.name;
 }
@@ -180,7 +218,7 @@ const addPhotoCard = (cardData, profile, {...rest}) => {
   document.querySelector(rest.photoCardPlace).prepend(card);
 }
 
-//---(запускаем добавление начальных карточек и отрисовку моих лайков)---
+//---(запускаем добавление начальных карточек)---
 const addInitialCards = (cards, profile, {...rest}) => {
   cards.forEach((cardsItem) => {
     addPhotoCard(cardsItem, profile, rest);
@@ -188,54 +226,61 @@ const addInitialCards = (cards, profile, {...rest}) => {
 };
 
 //---(если данные карточки ушли на сервер, то передаем их дальше для добавления карточки в разметку)---
-const addNewCard = (defaultText, submitButton, popup, cardData, profile, {...rest}) => {
-  postCardData(cardData)
-    .then((data) => {
-      addPhotoCard(data, profile, rest);
-    })
-    .catch((error) => {  //примет сообщение об ошибке при Promise.reject
-      console.log(error);
-    })
-    .finally(() => {
-      submitButton.textContent = defaultText;
+const addNewCard = (defaultText, submitButton, popup, cardDataForSend, profile, {...rest}) => {
+  postCardData(cardDataForSend)
+    .then((cardData) => {
+      addPhotoCard(cardData, profile, rest);
       resetPopup(popup);
       closePopup(popup);
     })
+    .catch((error) => {  //примет сообщение об ошибке при Promise.reject
+      console.log(error);
+      alert('Произошла какая-то ошибка. Попробуйте снова.')
+    })
+    .finally(() => {
+      submitButton.textContent = defaultText;
+    })
 }
 
-//---(формируем cardData из заполненных полей формы и передаем их при событии submit, вызываем обработчик кнопки закрытия)---
-const handleAddCardForm = (popup, form, profile, {...rest}) => {
+//---(формируем cardData из заполненных полей формы и передаем их при событии submit)---
+const handleAddCardForm = (popup, profile, {...rest}) => {
+  const form = popup.querySelector('.popup__form');
+  const submitButton = form.querySelector('.popup__button');
+  const defaultText = submitButton.textContent;
+  const title = form.querySelector(rest.popupTitle);
+  const image = form.querySelector(rest.popupImageLink);
+  toggleSubmitButtonState(form, formSelectors); //в validate
   form.addEventListener('submit', (evt) => {
-    const submitButton = form.querySelector('.popup__button');
-    const defaultText = submitButton.textContent;
-    const title = form.querySelector(rest.popupTitle);
-    const image = form.querySelector(rest.popupImageLink);
-    const cardData = {
+    evt.preventDefault();
+    const cardDataForSend = {
       name: `${title.value}`,
       link: `${image.value}`
     }
-    evt.preventDefault();
     changeButtonText(submitButton);
-    addNewCard(defaultText, submitButton, popup, cardData, profile, rest);
+    addNewCard(defaultText, submitButton, popup, cardDataForSend, profile, rest);
   })
 }
 
 //---(открываем попап добавления нового фото при клике по кнопке add)---
-const handleCardAddButton = (popup, form) => {
-  const button = document.querySelector('.profile__button-add');
+const handleCardAddButton = (popup) => {
   button.addEventListener('click', () => {
-    toggleButtonState(form, formSelectors); //в validate
     resetPopup(popup);
     openPopup(popup);
   })
 }
 
-//---(вызываем обработчики, запускаем отрисовку полученных карточек)---
+//---(вызываем обработчики формы удаления, кнопки и формы добавления карточек)---
+const handleSubmitForms = (profile, {...rest}) => {
+  const popupDeleteCard = document.querySelector(rest.popupDeletePhoto);
+  handleDeleteCardForm(popupDeleteCard);
+  const popupAddCard = document.querySelector(rest.popupAddPhoto);
+  handleCardAddButton(popupAddCard);
+  handleAddCardForm(popupAddCard, profile, rest);
+}
+
+//---(запускаем обработчики и отрисовку полученных карточек)---
 const handleCards = (cards, profile, {...rest}) => {
-  const popup = document.querySelector(rest.popupAddPhoto);
-  const form = popup.querySelector('.popup__form');
-  handleAddCardForm(popup, form, profile, rest);
-  handleCardAddButton(popup, form);
+  handleSubmitForms(profile, rest);
   addInitialCards(cards, profile, rest);
 }
 

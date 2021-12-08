@@ -1,6 +1,6 @@
 import { changeButtonText, closePopup, openPopup } from './popup.js';
 import { formSelectors } from './selectors.js';
-import { toggleButtonState } from './validate.js';
+import { toggleSubmitButtonState } from './validate.js';
 import { patchProfileData } from './api.js';
 export { handleProfile };
 
@@ -10,7 +10,7 @@ const handleEditButton = (popup, form, formTitle, formSubtitle, profileTitle, pr
   editButton.addEventListener('click', () => {
     formTitle.value = profileTitle.textContent;
     formSubtitle.value = profileSubtitle.textContent;
-    toggleButtonState(form, formSelectors);
+    toggleSubmitButtonState(form, formSelectors);
     openPopup(popup);
   });
 }
@@ -25,22 +25,23 @@ const addProfileData = (profile, profileTitle, profileSubtitle) => {
 const updateProfileData = (defaultText, submitButton, popup, formTitle, formSubtitle, profileTitle, profileSubtitle) => {
   patchProfileData(formTitle, formSubtitle)
   .then((profile) => {
-    addProfileData(profile, profileTitle, profileSubtitle)
+    addProfileData(profile, profileTitle, profileSubtitle);
+    closePopup(popup);
   })
   .catch((error) => {
     console.log(error);
+    alert('Произошла какая-то ошибка. Попробуйте снова.')
   })
   .finally(() => {
     submitButton.textContent = defaultText;
-    closePopup(popup);
   })
 }
 
 //---(назначаем действия при сабмите формы редактирования профиля, запускаем обработчик кнопки ее закрытия)---
 const handleProfileForm = (popup, form, formTitle, formSubtitle, profileTitle, profileSubtitle) => {
+  const submitButton = form.querySelector('.popup__button');
+  const defaultText = submitButton.textContent;
   form.addEventListener('submit', (evt) => {
-    const submitButton = form.querySelector('.popup__button');
-    const defaultText = submitButton.textContent;
     updateProfileData(defaultText, submitButton, popup, formTitle, formSubtitle, profileTitle, profileSubtitle);
     evt.preventDefault();
     changeButtonText(submitButton);

@@ -4,8 +4,6 @@ import { handlePopupCloseButton } from './popup.js';
 import { enableValidation } from './validate.js';
 import { formSelectors } from './selectors.js';
 
-
-
 getInitialData();
 handlePopupCloseButton();
 enableValidation(formSelectors);

@@ -1,6 +1,6 @@
 import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
 import { formSelectors } from './selectors.js';
-import { toggleButtonState } from './validate.js';
+import { toggleSubmitButtonState } from './validate.js';
 import { patchAvatar } from './api.js';
 export { handleAvatar };
 
@@ -11,7 +11,7 @@ const addAvatar = (profile, image) => {
 const handleAvatarEditButton = (popup, form, {...rest}) => {
   const button = document.querySelector(rest.avatarEditButton);
   button.addEventListener('click', () => {
-    toggleButtonState(form, formSelectors);
+    toggleSubmitButtonState(form, formSelectors);
     resetPopup(popup);
     openPopup(popup);
   });
@@ -21,23 +21,53 @@ const updateAvatar = (defaultText, submitButton, popup, formTitle, image) => {
   patchAvatar(formTitle)
   .then((profile) => {
     addAvatar(profile, image);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
-  .finally(() => {
-    submitButton.textContent = defaultText;
     resetPopup(popup);
     closePopup(popup);
   })
+  .catch((error) => {
+    console.log(error);
+    alert('Произошла какая-то ошибка. Попробуйте снова.')
+
+  })
+  .finally(() => {
+    submitButton.textContent = defaultText;
+  })
 }
 
+
+
+
+let dataForDeleteCard = {
+  cardId: null,
+  cardItem: null,
+}
+function resetDataForDeleteCard(){
+  dataForDeleteCard.cardId = null;
+  dataForDeleteCard.cardItem = null;
+}
+
+
+function requestDeleteCard(card){ //запросить удаление
+  cardForDelete = card;
+  openOverlay();
+}
+
+
+
+
+
+
+
+
+
+
+
 const handleAddAvatarForm = (popup, form, formTitle, image) => {
+  const submitButton = form.querySelector('.popup__button');
+  const defaultText = submitButton.textContent;
   form.addEventListener('submit', (evt) => {
-    const submitButton = form.querySelector('.popup__button');
-    const defaultText = submitButton.textContent;
-    updateAvatar(defaultText, submitButton, popup, formTitle, image); //popup,
     evt.preventDefault();
+    updateAvatar(defaultText, submitButton, popup, formTitle, image); //popup,
     changeButtonText(submitButton);
   });
 }

@@ -1,4 +1,4 @@
-export { enableValidation, hideInputError, toggleButtonState };
+export { enableValidation, hideInputError, toggleSubmitButtonState };
 
 const enableValidation = ({...rest}) => {
   formEventListeners(rest);
@@ -31,7 +31,7 @@ const hasInvalidInput = (inputList) => {
   })
 };
 
-const toggleButtonState = (form, {...rest}) => {
+const toggleSubmitButtonState = (form, {...rest}) => {
   const inputList = Array.from(form.querySelectorAll(rest.inputSelector));
   const button = form.querySelector(rest.submitButtonSelector);
   if (hasInvalidInput(inputList)) {
@@ -48,7 +48,7 @@ const inputEventListeners = (form, {...rest}) => {
   inputList.forEach((input) => {
     input.addEventListener('input', () => {
       isValid(form, input, rest);
-      toggleButtonState(form, rest);
+      toggleSubmitButtonState(form, rest);
     });
   });
 };

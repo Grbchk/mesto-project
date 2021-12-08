@@ -1,6 +1,6 @@
 import { resetError } from './utils.js';
 import { formSelectors } from './selectors.js';
-export { openPopup, closePopup, resetPopup, handleSubmitEvent, handlePopupCloseButton, changeButtonText };
+export { openPopup, closePopup, resetPopup, addCloseButtonListener, handlePopupCloseButton, changeButtonText };
 
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
@@ -25,11 +25,11 @@ const changeButtonText = (submitButton) => {
   submitButton.textContent = `${submitButton.textContent}...`;
 };
 
-//---(отменяет поведение по-умолчанию при сабмите формы)---
-const handleSubmitEvent = (popup) => {
-  event.preventDefault();
-  closePopup(popup);
-};
+// //---(отменяет поведение по-умолчанию при сабмите формы)---
+// const handleSubmitEvent = (popup) => {
+//   event.preventDefault();
+//   closePopup(popup);
+// };
 
 const addCloseButtonListener = (popup) => {
   popup.querySelector('.popup__close-button').addEventListener('click', () => {
@@ -41,7 +41,10 @@ const handlePopupCloseButton = () => {
   const popupList = Array.from(document.querySelectorAll('.popup'));
   popupList.push(document.querySelector('.viewing-photo'));
   popupList.forEach((popup) => {
-    addCloseButtonListener(popup);
+    // if (popup != document.querySelector('#delete-photo-card')) {
+    //   console.log(popup);
+      addCloseButtonListener(popup);
+    // }
   })
 }
 
