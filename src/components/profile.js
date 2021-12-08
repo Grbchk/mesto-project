@@ -30,7 +30,6 @@ const updateProfileData = (defaultText, submitButton, popup, formTitle, formSubt
   })
   .catch((error) => {
     console.log(error);
-    alert('Произошла какая-то ошибка. Попробуйте снова.')
   })
   .finally(() => {
     submitButton.textContent = defaultText;

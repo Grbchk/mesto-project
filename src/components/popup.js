@@ -1,6 +1,6 @@
 import { resetError } from './utils.js';
 import { formSelectors } from './selectors.js';
-export { openPopup, closePopup, resetPopup, addCloseButtonListener, handlePopupCloseButton, changeButtonText };
+export { openPopup, closePopup, resetPopup, handlePopupCloseButton, changeButtonText };
 
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');

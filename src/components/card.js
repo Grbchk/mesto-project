@@ -1,8 +1,13 @@
-import { changeButtonText, closePopup, openPopup, resetPopup, addCloseButtonListener } from './popup.js';
+import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
 import { getCards, putLike, deleteLike, deleteCard, postCardData } from './api.js';
 import { formSelectors } from './selectors.js';
 import { toggleSubmitButtonState } from './validate.js';
 export { addPhotoCard, handleCards, handleCardAddButton };
+
+let dataForDeleteCard = {
+  cardId: null,
+  cardItem: null,
+}
 
 //---(подсчитываем и отображаем количество лайков на фотокарточке)---
 const handleLikeCounter = (photoCard, cardData, {...rest}) => {
@@ -92,7 +97,7 @@ const removeDeletedCard = (photoCard) => {
 }
 
 //---(обрабатываем запрос на удаление карточки с сервера)---
-const deletePhotoCard = (cardID, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
+const deletePhotoCard = (popup, cardID, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
   deleteCard(cardID)
     .then(() => {
       removeDeletedCard(cardItem);
@@ -100,7 +105,6 @@ const deletePhotoCard = (cardID, cardItem, submitButton, defaultText) => {  //su
     })
     .catch((error) => {  //примет сообщение об ошибке при Promise.reject
       console.log(error);
-      alert('Произошла какая-то ошибка. Попробуйте снова.')
     })
     .finally(() => {
       submitButton.textContent = defaultText;
@@ -114,6 +118,10 @@ const showDeleteButton = (cardData, profile, button) => {
   }
 }
 
+const resetDataForDeleteCard = () => {
+  dataForDeleteCard.cardId = null;
+  dataForDeleteCard.cardItem = null;
+}
 
 //---(инициируем удаление карточки и закрываем попап подтверждения при событии submit)---
 const handleDeleteCardForm = (popup) => {
@@ -123,37 +131,10 @@ const handleDeleteCardForm = (popup) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     changeButtonText(submitButton);
-    // deletePhotoCard(cardId, cardItem, submitButton, defaultText);
-//сюда надо передавать данные для удаления
-
+    deletePhotoCard(popup, dataForDeleteCard.cardId, dataForDeleteCard.cardItem, submitButton, defaultText);
+    resetDataForDeleteCard();
   })
 }
-// addCloseButtonListener(popup);
-
-// const handleDeleteCardPopupCloseEvent = (popup) => {
-//   popup.querySelector('.popup__close-button').addEventListener('click', () => {
-//     // closePopup(popup);
-//   });
-//   if (event.key === 'Escape') {
-//     // closePopup(document.querySelector('.popup_opened'));
-//   }
-// }
-const openDeleteCardPopup = (popup) => {
-  popup.classList.add('popup_opened');
-
-  handleDeleteCardPopup(popup);
-};
-const openPopup = (popup) => {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', handleEscButton);
-  document.addEventListener('mousedown', handleClickOverlay);
-};
-const closePopup = (popup) => {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', handleEscButton);
-  document.removeEventListener('mousedown', handleClickOverlay);
-};
-
 
 //открываем попап и передаем данные кликнутой карточки
 //---(вызываем функцию отрисовки иконки удаления)---
@@ -164,7 +145,7 @@ const handleDeleteButton = (photoCard, cardData, profile, {...rest}) => {
   button.addEventListener('click', () => {
     dataForDeleteCard.cardId = cardData._id;
     dataForDeleteCard.cardItem = photoCard;
-    openDeleteCardPopup(popup);
+    openPopup(popup);
   })
 }
 
@@ -235,7 +216,6 @@ const addNewCard = (defaultText, submitButton, popup, cardDataForSend, profile, 
     })
     .catch((error) => {  //примет сообщение об ошибке при Promise.reject
       console.log(error);
-      alert('Произошла какая-то ошибка. Попробуйте снова.')
     })
     .finally(() => {
       submitButton.textContent = defaultText;
@@ -263,7 +243,8 @@ const handleAddCardForm = (popup, profile, {...rest}) => {
 
 //---(открываем попап добавления нового фото при клике по кнопке add)---
 const handleCardAddButton = (popup) => {
-  button.addEventListener('click', () => {
+  const addCardButton = document.querySelector('.profile__button-add');
+  addCardButton.addEventListener('click', () => {
     resetPopup(popup);
     openPopup(popup);
   })

@@ -26,41 +26,11 @@ const updateAvatar = (defaultText, submitButton, popup, formTitle, image) => {
   })
   .catch((error) => {
     console.log(error);
-    alert('Произошла какая-то ошибка. Попробуйте снова.')
-
   })
   .finally(() => {
     submitButton.textContent = defaultText;
   })
 }
-
-
-
-
-let dataForDeleteCard = {
-  cardId: null,
-  cardItem: null,
-}
-function resetDataForDeleteCard(){
-  dataForDeleteCard.cardId = null;
-  dataForDeleteCard.cardItem = null;
-}
-
-
-function requestDeleteCard(card){ //запросить удаление
-  cardForDelete = card;
-  openOverlay();
-}
-
-
-
-
-
-
-
-
-
-
 
 const handleAddAvatarForm = (popup, form, formTitle, image) => {
   const submitButton = form.querySelector('.popup__button');
