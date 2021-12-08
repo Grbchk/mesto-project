@@ -1,5 +1,5 @@
 import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
-import { getCards, putLike, deleteLike, deleteCard, postCardData } from './api.js';
+import { putLike, deleteLike, deleteCard, postCardData } from './api.js';
 import { formSelectors } from './selectors.js';
 import { toggleSubmitButtonState } from './validate.js';
 export { addPhotoCard, handleCards, handleCardAddButton };
@@ -9,11 +9,11 @@ let dataForDeleteCard = {
   cardItem: null,
 }
 
+let dataForToggleLike = {};
+
 //---(подсчитываем и отображаем количество лайков на фотокарточке)---
-const handleLikeCounter = (photoCard, cardData, {...rest}) => {
-  const counter = photoCard.querySelector(rest.heartCounter);
-  const likes = cardData.likes.length;
-  if (likes > 0) {
+const handleLikeCounter = (counter, likes, {...rest}) => {
+  if (likes.length > 0) {
     counter.classList.add(`${rest.heartCounter}_active`);
     counter.textContent = likes;
   } else {
@@ -23,10 +23,11 @@ const handleLikeCounter = (photoCard, cardData, {...rest}) => {
 }
 
 //---(обрабатываем вызов удаления лайка с карточки)---
-const removeLike = (like, cardData, photoCard, {...rest}) => {
-  deleteLike(cardData._id)
+const removeLike = (like, cardId, counter, {...rest}) => {
+  deleteLike(cardId)
   .then((cardData) => { //обновленные данные карточки
-    handleLikeCounter(photoCard, cardData, rest); //photoCard это элемент в разметке
+    dataForToggleLike[cardId] = cardData.likes;
+    handleLikeCounter(counter, cardData.likes, rest); //photoCard это элемент в разметке
     like.classList.remove('photo-card__button-heart_active');
   })
   .catch((error) => {
@@ -35,10 +36,11 @@ const removeLike = (like, cardData, photoCard, {...rest}) => {
 }
 
 //---(обрабатываем вызов добавления лайка на карточку)---
-const addLike = (like, cardData, photoCard, {...rest}) => {
-  putLike(cardData._id)
+const addLike = (like, cardId, counter, {...rest}) => { //
+  putLike(cardId)
   .then((cardData) => {  //put и delete возвращают актуальные данные карточки
-    handleLikeCounter(photoCard, cardData, rest);
+    dataForToggleLike[cardId] = cardData.likes;
+    handleLikeCounter(counter, cardData.likes, rest);
     like.classList.add('photo-card__button-heart_active');
   })
   .catch((error) => {
@@ -47,14 +49,38 @@ const addLike = (like, cardData, photoCard, {...rest}) => {
 }
 
 //---(вызываем удаление или добавление лайка после проверки)---
-const handleClickEvent = (eventTarget, cardData, photoCard, profile, {...rest}) => {
-  const check = cardData.likes.some(like => like._id === profile._id);
+const handleClickEvent = (like, counter, cardId, profile, {...rest}) => {
+  const likes = dataForToggleLike[cardId];
+  const check = likes.some(like => like._id === profile._id); //тут я прохожусь по likesArr, нужен актуальный
   if (check) {
-    removeLike(eventTarget, cardData, photoCard, rest);
+    removeLike(like, cardId, counter, rest);
   } else {
-    addLike(eventTarget, cardData, photoCard, rest);
+    addLike(like, cardId, counter, rest);
   }
 }
+
+//---(добавляем слушатель клика лайка)---
+const handleLikeButton = (photoCard, cardData, profile, {...rest}) => {
+  const like = photoCard.querySelector(rest.heartButton);
+  const counter = photoCard.querySelector(rest.heartCounter);
+  dataForToggleLike[cardData._id] = cardData.likes;
+  like.addEventListener('click', () => {
+    handleClickEvent(like, counter, cardData._id, profile, rest);
+  });
+}
+
+
+    ////////////это одна карточка
+        // все штуки уникальны, только массив лайков меняется
+        // (данные)
+      //     cardId -не меняется
+      // likesArr                    //сли передаю отсюда, то нужно запросить из объекта
+      //   // (элементы в разметке)         //откуда взять изначальные данные?
+      //     like - не меняется
+      //     counter - не меняется
+    ///////////
+        //массив лайков можно сверять по айди карточки
+        //остальные элементы передавать по цепочке
 
 //---(отображаем активными мои лайки ранее добавленные карточкам подгруженным с сервера)---
 const handleInitialLike = (photoCard, cardData, profile, {...rest}) => {
@@ -68,29 +94,6 @@ const handleInitialLike = (photoCard, cardData, profile, {...rest}) => {
   }
 }
 
-//---(запускаем обработчик клика после успешного обновления данных карточки)---
-const getNewCardData = (eventTarget, cardData, photoCard, profile, {...rest}) => {
-  getCards()
-  .then((cards) => {
-    const newCardData = cards.filter((card) => {
-      if (card._id === cardData._id) { return card }
-    })
-    handleClickEvent(eventTarget, newCardData[0], photoCard, profile, rest);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
-}
-
-//---(добавляем слушатель лайка и инициируем обновление данных карточки при клике)---
-const handleLikeButton = (photoCard, cardData, profile, {...rest}) => {
-  const likeButton = photoCard.querySelector(rest.heartButton);
-  likeButton.addEventListener('click', (evt) => {
-    const eventTarget = evt.target;
-    getNewCardData(eventTarget, cardData, photoCard, profile, rest)
-  });
-}
-
 //---(удаляем карточку из разметки)---
 const removeDeletedCard = (photoCard) => {
   photoCard.remove();
@@ -100,6 +103,7 @@ const removeDeletedCard = (photoCard) => {
 const deletePhotoCard = (popup, cardID, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
   deleteCard(cardID)
     .then(() => {
+      delete dataForToggleLike[cardID];
       removeDeletedCard(cardItem);
       closePopup(popup);
     })
@@ -118,12 +122,13 @@ const showDeleteButton = (cardData, profile, button) => {
   }
 }
 
+//---(сбрасываем записанные данные карточки)---
 const resetDataForDeleteCard = () => {
   dataForDeleteCard.cardId = null;
   dataForDeleteCard.cardItem = null;
 }
 
-//---(инициируем удаление карточки и закрываем попап подтверждения при событии submit)---
+//---(инициируем удаление карточки при событии submit)---
 const handleDeleteCardForm = (popup) => {
   const form = popup.querySelector('.popup__form');
   const submitButton = form.querySelector('.popup__button');
@@ -136,8 +141,7 @@ const handleDeleteCardForm = (popup) => {
   })
 }
 
-//открываем попап и передаем данные кликнутой карточки
-//---(вызываем функцию отрисовки иконки удаления)---
+//---(вызываем функцию отрисовки иконки удаления, передаем данные кликнутой карточки, открываем попап подтверждения)---
 const handleDeleteButton = (photoCard, cardData, profile, {...rest}) => {
   const popup = document.querySelector(rest.popupDeletePhoto);
   const button = photoCard.querySelector(rest.deleteButton);

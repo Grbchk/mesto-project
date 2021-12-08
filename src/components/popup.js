@@ -41,10 +41,7 @@ const handlePopupCloseButton = () => {
   const popupList = Array.from(document.querySelectorAll('.popup'));
   popupList.push(document.querySelector('.viewing-photo'));
   popupList.forEach((popup) => {
-    // if (popup != document.querySelector('#delete-photo-card')) {
-    //   console.log(popup);
       addCloseButtonListener(popup);
-    // }
   })
 }
 
