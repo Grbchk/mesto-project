@@ -1,5 +1,5 @@
 import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
-import { getCards, putLike, deleteLike, deleteCard, postCardData } from './api.js';
+import { putLike, deleteLike, deleteCard, postCardData } from './api.js';
 import { formSelectors } from './selectors.js';
 import { toggleSubmitButtonState } from './validate.js';
 export { addPhotoCard, handleCards, handleCardAddButton };
@@ -8,6 +8,8 @@ let dataForDeleteCard = {
   cardId: null,
   cardItem: null,
 }
+
+let dataForToggleLike = {};
 
 //---(подсчитываем и отображаем количество лайков на фотокарточке)---
 const handleLikeCounter = (photoCard, cardData, {...rest}) => {
@@ -25,8 +27,9 @@ const handleLikeCounter = (photoCard, cardData, {...rest}) => {
 //---(обрабатываем вызов удаления лайка с карточки)---
 const removeLike = (like, cardData, photoCard, {...rest}) => {
   deleteLike(cardData._id)
-  .then((cardData) => { //обновленные данные карточки
-    handleLikeCounter(photoCard, cardData, rest); //photoCard это элемент в разметке
+  .then((newCardData) => { //обновленные данные карточки
+    dataForToggleLike[cardData._id] = newCardData.likes;
+    handleLikeCounter(photoCard, newCardData, rest); //photoCard это элемент в разметке
     like.classList.remove('photo-card__button-heart_active');
   })
   .catch((error) => {
@@ -34,11 +37,12 @@ const removeLike = (like, cardData, photoCard, {...rest}) => {
   })
 }
 
-//---(обрабатываем вызов добавления лайка на карточку)---
+//---(обрабатываем вызов добавления лайка на карточку, обновляем массив лайков в объекте с данными карточки)---
 const addLike = (like, cardData, photoCard, {...rest}) => {
   putLike(cardData._id)
-  .then((cardData) => {  //put и delete возвращают актуальные данные карточки
-    handleLikeCounter(photoCard, cardData, rest);
+  .then((newCardData) => {  //put и delete возвращают актуальные данные карточки
+    dataForToggleLike[cardData._id] = newCardData.likes;
+    handleLikeCounter(photoCard, newCardData, rest);
     like.classList.add('photo-card__button-heart_active');
   })
   .catch((error) => {
@@ -47,12 +51,13 @@ const addLike = (like, cardData, photoCard, {...rest}) => {
 }
 
 //---(вызываем удаление или добавление лайка после проверки)---
-const handleClickEvent = (eventTarget, cardData, photoCard, profile, {...rest}) => {
-  const check = cardData.likes.some(like => like._id === profile._id);
+const handleClickEvent = (like, cardData, photoCard, profile, {...rest}) => {
+  const likes = dataForToggleLike[cardData._id];
+  const check = likes.some(like => like._id === profile._id);
   if (check) {
-    removeLike(eventTarget, cardData, photoCard, rest);
+    removeLike(like, cardData, photoCard, rest);
   } else {
-    addLike(eventTarget, cardData, photoCard, rest);
+    addLike(like, cardData, photoCard, rest);
   }
 }
 
@@ -68,26 +73,12 @@ const handleInitialLike = (photoCard, cardData, profile, {...rest}) => {
   }
 }
 
-//---(запускаем обработчик клика после успешного обновления данных карточки)---
-const getNewCardData = (eventTarget, cardData, photoCard, profile, {...rest}) => {
-  getCards()
-  .then((cards) => {
-    const newCardData = cards.filter((card) => {
-      if (card._id === cardData._id) { return card }
-    })
-    handleClickEvent(eventTarget, newCardData[0], photoCard, profile, rest);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
-}
-
-//---(добавляем слушатель лайка и инициируем обновление данных карточки при клике)---
+//---(добавляем слушатель лайка, передаем данные карточки в объект на хранение, инициируем обработчик клика)---
 const handleLikeButton = (photoCard, cardData, profile, {...rest}) => {
   const likeButton = photoCard.querySelector(rest.heartButton);
-  likeButton.addEventListener('click', (evt) => {
-    const eventTarget = evt.target;
-    getNewCardData(eventTarget, cardData, photoCard, profile, rest)
+  dataForToggleLike[cardData._id] = cardData.likes;
+  likeButton.addEventListener('click', () => {
+    handleClickEvent(likeButton, cardData, photoCard, profile, rest);
   });
 }
 
@@ -97,9 +88,10 @@ const removeDeletedCard = (photoCard) => {
 }
 
 //---(обрабатываем запрос на удаление карточки с сервера)---
-const deletePhotoCard = (popup, cardID, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
-  deleteCard(cardID)
+const deletePhotoCard = (popup, cardId, cardItem, submitButton, defaultText) => {  //submitButton.textContent = defaultText; передать сюда
+  deleteCard(cardId)
     .then(() => {
+      delete dataForToggleLike[cardId]; //убираем сохраненные в объекте данные карточки
       removeDeletedCard(cardItem);
       closePopup(popup);
     })

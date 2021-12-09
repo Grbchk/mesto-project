@@ -3,7 +3,7 @@ import { profileSelectors, photoCardSelectors } from './selectors.js';
 import { handleProfile } from './profile.js';
 import { handleAvatar } from './profile-avatar.js';
 import { handleCards } from './card.js';
-export { postCardData, patchAvatar, patchProfileData, getInitialData, getCards, putLike, deleteLike, deleteCard };
+export { postCardData, patchAvatar, patchProfileData, getInitialData, putLike, deleteLike, deleteCard };
 
 
 //---(обрабатываем ответ от сервера)---
