@@ -3,6 +3,7 @@
 Дневник для путешественников. Реализован на основе шестого учебного проекта.
 ### Ссылка на проект
 https://grbchk.github.io/mesto-project/
+#### [Чек-лист по проекту](https://code.s3.yandex.net/web-plus/checklists/checklist-5.2/index.html)
 ### Используемые технологии
 
 **HTML5**
