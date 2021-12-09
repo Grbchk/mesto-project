@@ -1,9 +1,5 @@
 import { configs } from './configs.js';
-import { profileSelectors, photoCardSelectors } from './selectors.js';
-import { handleProfile } from './profile.js';
-import { handleAvatar } from './profile-avatar.js';
-import { handleCards } from './card.js';
-export { postCardData, patchAvatar, patchProfileData, getInitialData, putLike, deleteLike, deleteCard };
+export { getCards, getProfile, postCardData, patchAvatar, patchProfileData, putLike, deleteLike, deleteCard };
 
 
 //---(обрабатываем ответ от сервера)---
@@ -76,12 +72,7 @@ const deleteCard = (cardId) => {
     method: 'DELETE',
     headers: configs.headers
   })
-  .then(res => {
-    if(res.ok){
-      return true;
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
+  .then(handleResponse)
 };
 
 //---(получаем массив карточек добавленных на сервер)---
@@ -100,20 +91,4 @@ const getProfile = () => {
   .then(handleResponse)
 };
 
-//---(запускаем обработчики запрошенных у сервера данных)---
-const handleInitialData = (cards, profile) => {
-  handleProfile(profile, profileSelectors);
-  handleAvatar(profile, profileSelectors);
-  handleCards(cards, profile, photoCardSelectors);
-};
-
-//---(запрашиваем начальные данные у сервера)---
-const getInitialData = () => {
-  Promise.all([getCards(), getProfile()])
-  .then((res) => {
-    const cards = res[0];
-    const profile = res[1];
-    handleInitialData(cards, profile);
-  })
-};
 
