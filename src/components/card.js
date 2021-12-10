@@ -1,7 +1,5 @@
 import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
 import { putLike, deleteLike, deleteCard, postCardData } from './api.js';
-import { formSelectors } from './selectors.js';
-import { toggleSubmitButtonState } from './validate.js';
 export { addPhotoCard, handleCards, handleCardAddButton };
 
 let dataForDeleteCard = {
@@ -203,7 +201,6 @@ const addNewCard = (defaultText, submitButton, popup, cardDataForSend, profile, 
   postCardData(cardDataForSend)
     .then((cardData) => {
       addPhotoCard(cardData, profile, rest);
-      resetPopup(popup);
       closePopup(popup);
     })
     .catch((error) => {  //примет сообщение об ошибке при Promise.reject
@@ -221,7 +218,6 @@ const handleAddCardForm = (popup, profile, {...rest}) => {
   const defaultText = submitButton.textContent;
   const title = form.querySelector(rest.popupTitle);
   const image = form.querySelector(rest.popupImageLink);
-  toggleSubmitButtonState(form, formSelectors); //в validate
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const cardDataForSend = {

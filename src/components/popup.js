@@ -1,5 +1,6 @@
 import { resetError } from './utils.js';
 import { formSelectors } from './selectors.js';
+import { toggleSubmitButtonState } from './validate.js';
 export { openPopup, closePopup, resetPopup, handlePopupCloseButton, changeButtonText };
 
 const openPopup = (popup) => {
@@ -12,6 +13,7 @@ const resetPopup = (popup) => {
   const form = popup.querySelector('.popup__form');
   form.reset();
   resetError(form, formSelectors);
+  toggleSubmitButtonState(form, formSelectors);
 };
 
 const closePopup = (popup) => {

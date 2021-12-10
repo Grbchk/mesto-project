@@ -1,7 +1,8 @@
 import { changeButtonText, closePopup, openPopup } from './popup.js';
-import { formSelectors } from './selectors.js';
 import { toggleSubmitButtonState } from './validate.js';
+import { formSelectors } from './selectors.js';
 import { patchProfileData } from './api.js';
+import { resetError } from './utils.js';
 export { handleProfile };
 
 //---(заполняем поля попапа редактирования профиля и открываем его при клике)---
@@ -10,6 +11,7 @@ const handleEditButton = (popup, form, formTitle, formSubtitle, profileTitle, pr
   editButton.addEventListener('click', () => {
     formTitle.value = profileTitle.textContent;
     formSubtitle.value = profileSubtitle.textContent;
+    resetError(form, formSelectors);
     toggleSubmitButtonState(form, formSelectors);
     openPopup(popup);
   });

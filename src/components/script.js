@@ -25,6 +25,9 @@ const getInitialData = () => {
     const profile = res[1];
     handleInitialData(cards, profile);
   })
+  .catch((error) => {
+    console.log(error);
+  })
 };
 
 getInitialData();

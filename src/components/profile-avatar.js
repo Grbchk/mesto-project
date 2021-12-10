@@ -1,6 +1,4 @@
 import { changeButtonText, closePopup, openPopup, resetPopup } from './popup.js';
-import { formSelectors } from './selectors.js';
-import { toggleSubmitButtonState } from './validate.js';
 import { patchAvatar } from './api.js';
 export { handleAvatar };
 
@@ -8,10 +6,9 @@ const addAvatar = (profile, image) => {
   image.src = profile.avatar;
 }
 
-const handleAvatarEditButton = (popup, form, {...rest}) => {
+const handleAvatarEditButton = (popup, {...rest}) => {
   const button = document.querySelector(rest.avatarEditButton);
   button.addEventListener('click', () => {
-    toggleSubmitButtonState(form, formSelectors);
     resetPopup(popup);
     openPopup(popup);
   });
@@ -21,7 +18,6 @@ const updateAvatar = (defaultText, submitButton, popup, formTitle, image) => {
   patchAvatar(formTitle)
   .then((profile) => {
     addAvatar(profile, image);
-    resetPopup(popup);
     closePopup(popup);
   })
   .catch((error) => {
@@ -48,6 +44,6 @@ const handleAvatar = (profile, {...rest}) => {
   const formTitle = form.querySelector(rest.popupAvatarTitle); //input (url)
   const image = document.querySelector(rest.avatarImage);
   addAvatar(profile, image);
-  handleAvatarEditButton(popup, form, rest);
+  handleAvatarEditButton(popup, rest);
   handleAddAvatarForm(popup, form, formTitle, image);
 }
