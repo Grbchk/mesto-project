@@ -197,7 +197,7 @@ const addInitialCards = (cards, profile, {...rest}) => {
 };
 
 //---(если данные карточки ушли на сервер, то передаем их дальше для добавления карточки в разметку)---
-const addNewCard = (defaultText, submitButton, popup, cardDataForSend, profile, {...rest}) => {
+const addNewCard = (popup, cardDataForSend, profile, {...formButtonData}, {...rest}) => {
   postCardData(cardDataForSend)
     .then((cardData) => {
       addPhotoCard(cardData, profile, rest);
@@ -207,17 +207,21 @@ const addNewCard = (defaultText, submitButton, popup, cardDataForSend, profile, 
       console.log(error);
     })
     .finally(() => {
-      submitButton.textContent = defaultText;
+      formButtonData.submitButton.textContent = formButtonData.defaultText;
     })
 }
 
 //---(формируем cardData из заполненных полей формы и передаем их при событии submit)---
 const handleAddCardForm = (popup, profile, {...rest}) => {
   const form = popup.querySelector('.popup__form');
-  const submitButton = form.querySelector('.popup__button');
-  const defaultText = submitButton.textContent;
   const title = form.querySelector(rest.popupTitle);
   const image = form.querySelector(rest.popupImageLink);
+  const submitButton = form.querySelector('.popup__button');
+  const defaultText = submitButton.textContent;
+  const formButtonData = {
+    submitButton: submitButton,
+    defaultText: defaultText
+  }
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const cardDataForSend = {
@@ -225,7 +229,7 @@ const handleAddCardForm = (popup, profile, {...rest}) => {
       link: `${image.value}`
     }
     changeButtonText(submitButton);
-    addNewCard(defaultText, submitButton, popup, cardDataForSend, profile, rest);
+    addNewCard(formButtonData, popup, cardDataForSend, profile, rest);
   })
 }
 
