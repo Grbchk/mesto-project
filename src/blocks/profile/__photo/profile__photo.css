@@ -8,6 +8,7 @@
 @media screen and (max-width: 690px) {
   .profile__photo {
     max-width: 200px;
+    min-height: 200px;
     transition: max-width .35s;
   }
 }
@@ -15,6 +16,7 @@
 @media screen and (max-width: 370px) {
   .profile__photo {
     max-width: 120px;
+    min-height: 120px;
     transition: max-width .35s;
   }
 }
